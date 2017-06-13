@@ -4,7 +4,7 @@
 INSTALL_DIR=/var/tmp/modelcar
 mkdir -p $INSTALL_DIR
 
-if [ "$USER" = "ubuntu" ] || [ "$USER" = "vagrant" ]; fi
+if [ "$USER" = "ubuntu" ] || [ "$USER" = "vagrant" ]; then
 	# Poor man's vagrant detection
 
 	# Running in vagrant install initial packages
