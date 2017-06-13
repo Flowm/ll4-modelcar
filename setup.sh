@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
+set -ex
 
 # Config
-INSTALL_DIR=/var/tmp/modelcar
-mkdir -p $INSTALL_DIR
+INSTALLBASE=/var/tmp/modelcar
+INSTALLDIR=$INSTALLBASE/operating-system
+mkdir -p $INSTALLDIR
 
 if [ "$USER" = "ubuntu" ] || [ "$USER" = "vagrant" ]; then
 	# Poor man's vagrant detection
@@ -15,10 +17,11 @@ if [ "$USER" = "ubuntu" ] || [ "$USER" = "vagrant" ]; then
 fi
 
 
-cd $INSTALL_DIR
+cd $INSTALLBASE
 git clone https://github.com/argos-research/operating-system.git
+#rm -rf $INSTALLDIR/genode/contrib/
 
-rm -rf $INSTALL_DIR/genode/contrib/
+cd $INSTALLDIR
 
 git submodule init
 git submodule update
