@@ -1,13 +1,21 @@
 #!/usr/bin/env bash
 
-#export DEBIAN_FRONTEND=noninteractive
-#sudo apt-get update
-#sudo apt-get upgrade
-#sudo apt-get install -y libncurses5-dev texinfo autogen autoconf2.64 g++ libexpat1-dev flex bison gperf cmake libxml2-dev libtool zlib1g-dev libglib2.0-dev make pkg-config gawk subversion expect git libxml2-utils syslinux xsltproc yasm iasl lynx unzip qemu alsa-base alsa-utils pulseaudio pulseaudio-utils ubuntu-desktop tftpd-hpa
-
+# Config
 INSTALL_DIR=/var/tmp/modelcar
-cd $INSTALL_DIR
+mkdir -p $INSTALL_DIR
 
+if [ "$USER" = "ubuntu" ] || [ "$USER" = "vagrant" ]; fi
+	# Poor man's vagrant detection
+
+	# Running in vagrant install initial packages
+	export DEBIAN_FRONTEND=noninteractive
+	sudo apt-get update
+	sudo apt-get upgrade
+	sudo apt-get install -y libncurses5-dev texinfo autogen autoconf2.64 g++ libexpat1-dev flex bison gperf cmake libxml2-dev libtool zlib1g-dev libglib2.0-dev make pkg-config gawk subversion expect git libxml2-utils syslinux xsltproc yasm iasl lynx unzip qemu alsa-base alsa-utils pulseaudio pulseaudio-utils ubuntu-desktop tftpd-hpa
+fi
+
+
+cd $INSTALL_DIR
 git clone https://github.com/argos-research/operating-system.git
 
 rm -rf $INSTALL_DIR/genode/contrib/
