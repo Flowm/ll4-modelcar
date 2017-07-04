@@ -1,8 +1,21 @@
 #
 # Build
 #
+set use_usb_driver [expr [have_spec omap4] || [have_spec arndale] || [have_spec rpi]]
+set use_nic_driver [expr !$use_usb_driver && ![have_spec imx53] && ![have_spec hw_odroid_xu] && ![have_spec linux] && ![have_spec hw_wand_quad]]
 
-build { core init car_panda drivers/timer }
+if {[expr !$use_usb_driver && !$use_nic_driver]} {
+	puts "\n Run script is not supported on this platform. \n"; exit 0 }
+
+set build_components { core init car_panda drivers/timer drivers/nic }
+
+lappend_if $use_usb_driver              build_components drivers/usb
+lappend_if [have_spec gpio]             build_components drivers/gpio
+
+source ${genode_dir}/repos/base/run/platform_drv.inc
+append_platform_drv_build_components
+
+build $build_components
 
 create_boot_directory
 
@@ -10,7 +23,7 @@ create_boot_directory
 # Generate config
 #
 
-install_config {
+set config {
 <config>
 	<parent-provides>
 		<service name="CAP"/>
@@ -45,13 +58,63 @@ install_config {
 	<start name="hello_client">
 		<resource name="RAM" quantum="1M"/>
 	</start>
-</config>}
+}
+
+append_if [have_spec gpio] config {
+	<start name="gpio_drv">
+		<resource name="RAM" quantum="4M"/>
+		<provides><service name="Gpio"/></provides>
+		<config/>
+	</start>
+}
+
+append_if $use_usb_driver config {
+  <start name="usb_drv">
+    <resource name="RAM" quantum="64M"/>
+    <provides>
+      <service name="Nic"/>
+    </provides>
+    <config uhci="yes" ehci="yes" xhci="yes">
+      <nic mac="02:00:00:00:01:01"/>
+    </config>
+  </start>
+}
+
+append_platform_drv_config
+
+append_if $use_nic_driver config {
+  <start name="nic_drv">
+    <resource name="RAM" quantum="4M"/>
+    <provides><service name="Nic"/></provides>
+  </start>
+}
+
+append config {
+  </config>
+}
+
+install_config $config
 
 #
 # Boot image
 #
 
-build_boot_image { core init hello_client hello_server timer libprotobuf.lib.so libmosquitto.lib.so libc.lib.so stdcxx.lib.so lwip.lib.so libssl.lib.so libcrypto.lib.so ld.lib.so libm.lib.so pthread.lib.so }
+append qemu_args "-net nic,model=lan9118,macaddr=02:00:00:00:01:01 "
+
+#
+# Boot image
+#
+
+set boot_modules { core init hello_client hello_server timer libprotobuf.lib.so libmosquitto.lib.so libc.lib.so stdcxx.lib.so lwip.lib.so libssl.lib.so libcrypto.lib.so ld.lib.so libm.lib.so pthread.lib.so }
+
+# platform-specific modules
+lappend_if $use_usb_driver              boot_modules usb_drv
+lappend_if $use_nic_driver              boot_modules nic_drv
+lappend_if [have_spec gpio]             boot_modules gpio_drv
+
+append_platform_drv_boot_modules
+
+build_boot_image $boot_modules
 
 append qemu_args " -nographic "
 
