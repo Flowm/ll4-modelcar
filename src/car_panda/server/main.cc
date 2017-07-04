@@ -11,14 +11,29 @@
  * under the terms of the GNU General Public License version 2.
  */
 
-#include <base/printf.h>
+
+
+
 #include <base/env.h>
+#include <base/printf.h>
 #include <base/sleep.h>
 #include <cap_session/connection.h>
+#include <os/config.h>
 #include <root/component.h>
+#include <util/xml_node.h>
 #include <hello_session/hello_session.h>
 #include <base/rpc_server.h>
+
+extern "C" {
+#include <lwip/sockets.h>
+}
+#include <lwip/genode.h>
+#include <nic/packet_allocator.h>
+
+
 #include <mosquittopp.h>
+
+#include "sender.h"
 
 namespace Hello {
 
@@ -87,7 +102,56 @@ int main(void)
 	static Hello::Root_component hello_root(&ep, &sliced_heap);
 	env()->parent()->announce(ep.manage(&hello_root));
 
-	/* We are done with this and only act upon client requests now. */
+	enum { BUF_SIZE = Nic::Packet_allocator::DEFAULT_PACKET_SIZE * 128 };
+
+	Genode::Xml_node network = Genode::config()->xml_node().sub_node("network");
+
+	if (network.attribute_value<bool>("dhcp", true)) {
+		PDBG("DHCP network...");
+		if (lwip_nic_init(0,
+		                  0,
+		                  0,
+		                  BUF_SIZE,
+		                  BUF_SIZE)) {
+			PERR("lwip init failed!");
+			return 1;
+		}
+		PDBG("done");
+	} else {
+		PDBG("manual network...");
+		char ip_addr[16] = {0};
+		char subnet[16] = {0};
+		char gateway[16] = {0};
+
+		network.attribute("ip-address").value(ip_addr, sizeof(ip_addr));
+		network.attribute("subnet-mask").value(subnet, sizeof(subnet));
+		network.attribute("default-gateway").value(gateway, sizeof(gateway));
+
+		if (lwip_nic_init(inet_addr(ip_addr),
+		                  inet_addr(subnet),
+		                  inet_addr(gateway),
+		                  BUF_SIZE,
+		                  BUF_SIZE)) {
+			PERR("lwip init failed!");
+			return 1;
+		}
+		PDBG("done");
+	}
+
+	/* get config */
+	Genode::Xml_node mosquitto = Genode::config()->xml_node().sub_node("mosquitto");
+
+	char ip_addr[16] = {0};
+	char port[5] = {0};
+
+	mosquitto.attribute("ip-address").value(ip_addr, sizeof(ip_addr));
+	mosquitto.attribute("port").value(port, sizeof(port));
+
+	PDBG("mosquitto init");
+	Mqtt_Sender *mqtt_sender = new Mqtt_Sender("999", "/topic/test", ip_addr, atoi(port));	
+
+	mqtt_sender->send_message("hello world");
+
 	sleep_forever();
 
 	return 0;
