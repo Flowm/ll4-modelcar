@@ -3,11 +3,10 @@
 
 #include <mosquittopp.h>
 
-class Mqtt_Sender : public mosqpp::mosquittopp
+class Mqtt_Entity : public mosqpp::mosquittopp
 {
     private:
         const char *host;
-        const char *id;
         const char *topic;
         int port;
         int keepalive;
@@ -15,10 +14,12 @@ class Mqtt_Sender : public mosqpp::mosquittopp
         void on_connect(int rc);
         void on_disconnect(int rc);
         void on_publish(int mid);
+        void on_message(const struct mosquitto_message *message);
     public:
-        Mqtt_Sender(const char *id, const char *topic, const char *host, int port);
-        ~Mqtt_Sender();
+        Mqtt_Entity(const char *topic);
+        ~Mqtt_Entity();
         bool send_message(const char *message);
+        bool my_subscribe(const char *topic);
 };
 
 #endif /* SENDER_H */
