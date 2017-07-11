@@ -9,8 +9,8 @@
 #include <iostream>
 
 Servo::Servo(const char *device) {
-    int fd = open(device, O_RDWR | O_NOCTTY);
-    if (fd == -1) {
+    fd = open(device, O_RDWR | O_NOCTTY);
+    if (fd < 0) {
         char buffer[50];
         sprintf(buffer, "Could not open device %s", device);
         printError(buffer);
