@@ -12,8 +12,12 @@
 #include <termios.h>
 #endif
 
-// Gets the position of a Maestro channel.
-// See the "Serial Servo Commands" section of the user's guide.
+/**
+ * Sets the maximum speed of the servo
+ * @param fd			file descriptor describing the serial port
+ * @param channel	channel where the servo is connected
+ * @return returns -1 if error ocured else the current position
+ */
 int maestroGetPosition(int fd, unsigned char channel)
 {
   unsigned char command[] = {0x90, channel};
@@ -33,6 +37,11 @@ int maestroGetPosition(int fd, unsigned char channel)
   return response[0] + 256*response[1];
 }
 
+/**
+ * Returns any servo is still moving
+ * @param fd			file descriptor describing the serial port
+ * @return returns -1 if error occured, 0 if not moving and 1 if moving
+ */
 int maestroGetMovingState(int fd)
 {
   unsigned char command[] = {0x93};
@@ -52,9 +61,13 @@ int maestroGetMovingState(int fd)
   return response[0];
 }
 
-// Sets the target of a Maestro channel.
-// See the "Serial Servo Commands" section of the user's guide.
-// The units of 'target' are quarter-microseconds.
+/**
+ * Sets the target position of the servo
+ * @param fd			file descriptor describing the serial port
+ * @param channel	channel where the servo is connected
+ * @param target	target position in quarter microseconds
+ * @return returns -1 if error ocured else 0
+ */
 int maestroSetTarget(int fd, unsigned char channel, unsigned short target)
 {
   unsigned char command[] = {0x84, channel, target & 0x7F, target >> 7 & 0x7F};
@@ -66,6 +79,13 @@ int maestroSetTarget(int fd, unsigned char channel, unsigned short target)
   return 0;
 }
 
+/**
+ * Sets the maximum speed of the servo
+ * @param fd			file descriptor describing the serial port
+ * @param channel	channel where the servo is connected
+ * @param speed		maximum speed in quarter milliseconds. 0 means unlimited.
+ * @return returns -1 if error ocured else 0
+ */
 int maestroSetSpeed(int fd, unsigned char channel, unsigned short speed) {
   unsigned char command[] = {0x87, channel, speed & 0x7F, speed >> 7 & 0x7F };
   if (write(fd, command, sizeof(command)) == -1)
@@ -76,6 +96,13 @@ int maestroSetSpeed(int fd, unsigned char channel, unsigned short speed) {
   return 0;
 }
 
+/**
+ * Sets the maximum accleration of the servo
+ * @param fd			file descriptor describing the serial port
+ * @param channel	channel where the servo is connected
+ * @param accleration		maximum accleration as value between 1 and 255. 0 means unlimited
+ * @return returns -1 if error ocured else 0
+ */
 int maestroSetAcceleration(int fd, unsigned char channel, unsigned short acc) {
   unsigned char command[] = {0x89, channel, acc & 0x7F, acc >> 7 & 0x7F };
   if (write(fd, command, sizeof(command)) == -1)
