@@ -13,7 +13,7 @@ Mqtt_Entity::Mqtt_Entity(const char *topic)
 	 if (fd == -1)
 	 {
 		std::cout << "error opening file" << std::endl;
-		 return 1;
+		 return;
 	 }
 
 	 struct termios options;
