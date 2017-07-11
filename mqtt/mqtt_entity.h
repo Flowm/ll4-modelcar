@@ -23,10 +23,9 @@ class Mqtt_Entity : public mosqpp::mosquittopp
         ~Mqtt_Entity();
         bool send_message(const char *message);
         bool my_subscribe(const char *topic);
-        void getCmd(char *buffer);
-        void setCmd(char *cmd);
-        
-        sem_t msgSem; 
+        void getCmd(char *buffer, size_t size);
+
+        sem_t msgSem;
 };
 
 #endif /* SENDER_H */

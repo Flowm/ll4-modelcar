@@ -5,27 +5,31 @@
 #include <string.h>
 
 int main(int argc, char *argv[]) {
-
-    Mqtt_Entity *mqtt_entity = new Mqtt_Entity("topic/send");
-    Servo *servo = new Servo("/dev/ttyUSB0");
-
-    mqtt_entity->my_subscribe("topic/receive");
-    
     char cmd[20];
     char *split, *channel, *target;
+
+    Mqtt_Entity *mqtt_entity = new Mqtt_Entity("car-state");
+    Servo *servo = new Servo("/dev/ttyUSB0");
+
+    mqtt_entity->my_subscribe("car-control");
+
     while (true) {
         sem_wait(&mqtt_entity->msgSem);
-        mqtt_entity->getCmd(cmd);
-        
-        // send to polulu
+        mqtt_entity->getCmd(cmd, sizeof(cmd));
+
+        // Send to polulu
         split = strtok(cmd, ",");
-        if (split != NULL) {
-            channel = split;
-            target = strtok(NULL, ",");
+        if (!split) {
+            continue;
+        }
+        channel = split;
+
+        target = strtok(NULL, ",");
+        if (!target) {
+            continue;
         }
 
-        servo->maestroSetTarget(strtoul(channel, NULL, 0), strtoul(target, NULL, 0));         
-
+        servo->maestroSetTarget(strtoul(channel, NULL, 0), strtoul(target, NULL, 0));
     }
 
     delete mqtt_entity;
