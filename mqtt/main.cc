@@ -2,6 +2,7 @@
 #include "servo.h"
 #include <unistd.h>
 #include <iostream>
+#include <string.h>
 
 int main(int argc, char *argv[]) {
 
@@ -23,7 +24,7 @@ int main(int argc, char *argv[]) {
                 target = strtok(NULL, ",");
             }
         
-            servo->maestroSetTargeti(channel, target);         
+            servo->maestroSetTarget(strtoul(channel, NULL, 0), strtoul(target, NULL, 0));         
             mqtt_entity->setCmd(NULL);
         } 
 

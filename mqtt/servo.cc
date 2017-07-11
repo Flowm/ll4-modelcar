@@ -4,11 +4,14 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <termios.h>
+#include <stdio.h>
 
 Servo::Servo(const char *device) {
     int fd = open(device, O_RDWR | O_NOCTTY);
     if (fd == -1) {
-        printError("Could not open device %s", device);
+        char buffer[50];
+        sprintf(buffer, "Could not open device %s", device);
+        printError(buffer);
         return; 
     } 
 
