@@ -8,7 +8,9 @@ Mqtt_Entity::Mqtt_Entity(const char *topic)
         this->keepalive = 60;
         this->host = "localhost";
         this->port = 1883;
-        
+
+        sem_init(&msgSem, 0, 0);       
+ 
         mosqpp::lib_init();
         connect(host, port, keepalive);
         loop_start();
@@ -31,8 +33,8 @@ bool Mqtt_Entity::my_subscribe(const char *topic) {
     return (ret == MOSQ_ERR_SUCCESS); 
 }
 
-char *Mqtt_Entity::getCmd() {
-    return cmd;
+void Mqtt_Entity::getCmd(char *buffer) {
+    strcpy(buffer, cmd);
 }
 
 void Mqtt_Entity::setCmd(char *cmd) {
@@ -59,5 +61,6 @@ void Mqtt_Entity::on_message(const struct mosquitto_message *message) {
     char *msg = (char*) message->payload;
     std::cout << ">> Mqtt_Entity - message received " << msg << std::endl;
     strcpy(cmd, msg);
+    sem_post(&msgSem);
 }
 

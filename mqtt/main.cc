@@ -11,24 +11,21 @@ int main(int argc, char *argv[]) {
 
     mqtt_entity->my_subscribe("topic/receive");
     
-    char *cmd;
+    char cmd[20];
     char *split, *channel, *target;
     while (true) {
-
-        cmd = mqtt_entity->getCmd();
-        if (cmd != NULL) {
-            // send to polulu
-            split = strtok(cmd, ",");
-            if (split != NULL) {
-                channel = split;
-                target = strtok(NULL, ",");
-            }
+        sem_wait(&mqtt_entity->msgSem);
+        mqtt_entity->getCmd(cmd);
         
-            servo->maestroSetTarget(strtoul(channel, NULL, 0), strtoul(target, NULL, 0));         
-            mqtt_entity->setCmd(NULL);
-        } 
+        // send to polulu
+        split = strtok(cmd, ",");
+        if (split != NULL) {
+            channel = split;
+            target = strtok(NULL, ",");
+        }
 
-        sleep(1000);
+        servo->maestroSetTarget(strtoul(channel, NULL, 0), strtoul(target, NULL, 0));         
+
     }
 
     delete mqtt_entity;
