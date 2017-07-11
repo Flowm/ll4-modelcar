@@ -11,6 +11,8 @@ class Mqtt_Entity : public mosqpp::mosquittopp
         int port;
         int keepalive;
 
+	int fd;	
+
         void on_connect(int rc);
         void on_disconnect(int rc);
         void on_publish(int mid);
@@ -20,6 +22,7 @@ class Mqtt_Entity : public mosqpp::mosquittopp
         ~Mqtt_Entity();
         bool send_message(const char *message);
         bool my_subscribe(const char *topic);
+	int maestroSetTarget(unsigned char channel, unsigned short target);
 };
 
 #endif /* SENDER_H */
