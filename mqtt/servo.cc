@@ -6,6 +6,8 @@
 #include <termios.h>
 #include <stdio.h>
 
+#include <iostream>
+
 Servo::Servo(const char *device) {
     int fd = open(device, O_RDWR | O_NOCTTY);
     if (fd == -1) {
@@ -22,6 +24,8 @@ Servo::Servo(const char *device) {
     options.c_oflag &= ~(ONLCR | OCRNL); 
     options.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
     tcsetattr(fd, TCSANOW, &options);
+
+    std::cout << "Servo initialized" << std::endl;
 }
 
 Servo::~Servo() {
