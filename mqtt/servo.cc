@@ -52,6 +52,11 @@ int Servo::maestroSetTarget(unsigned char channel, unsigned short target) {
 }
 
 int Servo::maestroSetSpeed(unsigned char channel, unsigned short speed) {
+    if (channel > 11) {
+        printError("Channel does not exist");
+        return -1;
+    }
+
     unsigned char command[] = {0x87, channel, speed & 0x7F, speed >> 7 & 0x7F };
     if (write(fd, command, sizeof(command)) == -1) {
         printError("error writing");
@@ -61,6 +66,16 @@ int Servo::maestroSetSpeed(unsigned char channel, unsigned short speed) {
 }
 
 int Servo::maestroSetAcceleration(unsigned char channel, unsigned short acc) {
+    if (channel > 11) {
+        printError("Channel does not exist");
+        return -1;
+    }
+
+    if (acc  > 255) {
+        printError("Invalid target acceleration - range is 0 to 255");
+        return -1;
+    }
+
     unsigned char command[] = {0x89, channel, acc & 0x7F, acc >> 7 & 0x7F };
     if (write(fd, command, sizeof(command)) == -1) {
         printError("error writing");
@@ -70,6 +85,11 @@ int Servo::maestroSetAcceleration(unsigned char channel, unsigned short acc) {
 }
 
 int Servo::maestroGetPosition(unsigned char channel) {
+    if (channel > 11) {
+        printError("Channel does not exist");
+        return -1;
+    }
+
     unsigned char command[] = {0x90, channel};
     if(write(fd, command, sizeof(command)) == -1) {
         printError("error writing");
@@ -101,4 +121,3 @@ int Servo::maestroGetMovingState() {
     return response[0];
 
 }
-

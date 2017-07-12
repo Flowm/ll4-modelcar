@@ -13,7 +13,7 @@
 #endif
 
 /**
- * Sets the maximum speed of the servo
+ * Gets the current position of the servo
  * @param fd			file descriptor describing the serial port
  * @param channel	channel where the servo is connected
  * @return returns -1 if error ocured else the current position
