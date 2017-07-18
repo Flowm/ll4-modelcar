@@ -50,17 +50,21 @@ int main(int argc, char *argv[]) {
         switch (strtoul(id, NULL, 0)) {
             case STEER :
                 servoVal = controller->transform_steer(value);
-                snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", STEER_CHANNEL, servoVal);
-                mqtt_entity->send_message(servo_cmd);
+                if(servoVal != -1){
+                    snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", STEER_CHANNEL, servoVal);
+                    mqtt_entity->send_message(servo_cmd);
+                }
                 break;
             case BRAKE :
                 servoVal = controller->transform_brake(value);
-                snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_LEFT_FRONT_CHANNEL, servoVal);
-                mqtt_entity->send_message(servo_cmd);
-                snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_RIGHT_FRONT_CHANNEL, servoVal);
-                mqtt_entity->send_message(servo_cmd);
-                snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_REAR_CHANNEL, servoVal);
-                mqtt_entity->send_message(servo_cmd);
+                if(servoVal != -1){
+                    snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_LEFT_FRONT_CHANNEL, servoVal);
+                    mqtt_entity->send_message(servo_cmd);
+                    snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_RIGHT_FRONT_CHANNEL, servoVal);
+                    mqtt_entity->send_message(servo_cmd);
+                    snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_REAR_CHANNEL, servoVal);
+                    mqtt_entity->send_message(servo_cmd);
+                }
                 break;
             case ACCEL :
                 //servoVal = controller->transform_accel(value);
