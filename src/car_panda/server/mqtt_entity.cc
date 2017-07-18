@@ -9,7 +9,7 @@ Mqtt_Entity::Mqtt_Entity(const char* id, const char *topic)
         this->host = "localhost";
         this->port = 1883;
 
-        sem_init(&msgSem, 0, 0);
+        //sem_init(&msgSem, 0, 0);
 
         mosqpp::lib_init();
         connect(host, port, keepalive);
@@ -57,6 +57,6 @@ void Mqtt_Entity::on_message(const struct mosquitto_message *message) {
     char *msg = (char*) message->payload;
     std::cout << ">> Mqtt_Entity - message received " << msg << std::endl;
     strncpy(cmd, msg, sizeof(cmd));
-    sem_post(&msgSem);
+    //sem_post(&msgSem);
 }
 

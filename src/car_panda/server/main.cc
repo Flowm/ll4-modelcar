@@ -110,7 +110,8 @@ int main(void)
     mqtt_entity->my_subscribe("car-control");
 
     while (true) {
-        sem_wait(&mqtt_entity->msgSem);
+        //sem_wait(&mqtt_entity->msgSem);
+        timer.msleep(10000);
         mqtt_entity->getCmd(recv_cmd, sizeof(recv_cmd));
 
         split = strtok(recv_cmd, ",");

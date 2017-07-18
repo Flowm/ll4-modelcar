@@ -1,7 +1,7 @@
 #ifndef SENDER_H
 #define SENDER_H
-#include <semaphore.h>
 
+//#include <semaphore.h>
 #include <mosquittopp.h>
 
 class Mqtt_Entity : public mosqpp::mosquittopp
@@ -25,7 +25,7 @@ class Mqtt_Entity : public mosqpp::mosquittopp
         bool my_subscribe(const char *topic);
         void getCmd(char *buffer, size_t size);
 
-        sem_t msgSem;
+        //sem_t msgSem;
 };
 
 #endif /* SENDER_H */
