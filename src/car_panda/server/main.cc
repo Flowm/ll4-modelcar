@@ -11,9 +11,6 @@
  * under the terms of the GNU General Public License version 2.
  */
 
-
-
-
 #include <base/env.h>
 #include <base/printf.h>
 #include <base/sleep.h>
@@ -33,10 +30,6 @@ extern "C" {
 #include "mqtt_entity.h"
 #include "controller.h"
 #include "utilities.h"
-//#include <unistd.h>
-//#include <string.h>
-//#include <string>
-//#include <stdio.h>
 
 #define STEER_CHANNEL "6"
 #define BRAKE_LEFT_FRONT_CHANNEL "1"
@@ -44,67 +37,67 @@ extern "C" {
 #define BRAKE_REAR_CHANNEL "0"
 
 enum IDs {
-    STEER = 0,	// [-1;1]
-    BRAKE = 1,	// [0;1]
-    ACCEL = 2	// [0,1]
+    STEER = 0, // [-1;1]
+    BRAKE = 1, // [0;1]
+    ACCEL = 2  // [0,1]
 };
 
 using namespace Genode;
 
 int main(void)
 {
-	Timer::Connection timer;
+  Timer::Connection timer;
 
-	enum { BUF_SIZE = Nic::Packet_allocator::DEFAULT_PACKET_SIZE * 128 };
+  enum { BUF_SIZE = Nic::Packet_allocator::DEFAULT_PACKET_SIZE * 128 };
 
-	Genode::Xml_node network = Genode::config()->xml_node().sub_node("network");
+  Genode::Xml_node network = Genode::config()->xml_node().sub_node("network");
 
-	if (network.attribute_value<bool>("dhcp", true)) {
-		PDBG("DHCP network...");
-		if (lwip_nic_init(0,
-		                  0,
-		                  0,
-		                  BUF_SIZE,
-		                  BUF_SIZE)) {
-			PERR("lwip init failed!");
-			return 1;
-		}
-		PDBG("done");
-	} else {
-		PDBG("manual network...");
-		char ip_addr[16] = {0};
-		char subnet[16] = {0};
-		char gateway[16] = {0};
+  if (network.attribute_value<bool>("dhcp", true)) {
+    PDBG("DHCP network...");
+    if (lwip_nic_init(0,
+          0,
+          0,
+          BUF_SIZE,
+          BUF_SIZE)) {
+      PERR("lwip init failed!");
+      return 1;
+    }
+    PDBG("done");
+  } else {
+    PDBG("manual network...");
+    char ip_addr[16] = {0};
+    char subnet[16] = {0};
+    char gateway[16] = {0};
 
-		network.attribute("ip-address").value(ip_addr, sizeof(ip_addr));
-		network.attribute("subnet-mask").value(subnet, sizeof(subnet));
-		network.attribute("default-gateway").value(gateway, sizeof(gateway));
+    network.attribute("ip-address").value(ip_addr, sizeof(ip_addr));
+    network.attribute("subnet-mask").value(subnet, sizeof(subnet));
+    network.attribute("default-gateway").value(gateway, sizeof(gateway));
 
-		if (lwip_nic_init(inet_addr(ip_addr),
-		                  inet_addr(subnet),
-		                  inet_addr(gateway),
-		                  BUF_SIZE,
-		                  BUF_SIZE)) {
-			PERR("lwip init failed!");
-			return 1;
-		}
-		PDBG("done");
-	}
+    if (lwip_nic_init(inet_addr(ip_addr),
+          inet_addr(subnet),
+          inet_addr(gateway),
+          BUF_SIZE,
+          BUF_SIZE)) {
+      PERR("lwip init failed!");
+      return 1;
+    }
+    PDBG("done");
+  }
 
-	/* get config */
-	Genode::Xml_node mosquitto = Genode::config()->xml_node().sub_node("mosquitto");
+  /* get config */
+  Genode::Xml_node mosquitto = Genode::config()->xml_node().sub_node("mosquitto");
 
-	char ip_addr[16] = {0};
-	char port[5] = {0};
+  char ip_addr[16] = {0};
+  char port[5] = {0};
 
-	mosquitto.attribute("ip-address").value(ip_addr, sizeof(ip_addr));
-	mosquitto.attribute("port").value(port, sizeof(port));
+  mosquitto.attribute("ip-address").value(ip_addr, sizeof(ip_addr));
+  mosquitto.attribute("port").value(port, sizeof(port));
 
 
     char recv_cmd[50];
     char servo_cmd[10];
-    
-    char *split, *id, *target; 
+
+    char *split, *id, *target;
     double value;
     int servoVal;
 
@@ -152,14 +145,14 @@ int main(void)
                 break;
             default :
                 servoVal = -1;
-                break;              
+                break;
         }
     }
 
     delete mqtt_entity;
     delete controller;
 
-	sleep_forever();
+    sleep_forever();
 
-	return 0;
+    return 0;
 }
