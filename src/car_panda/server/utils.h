@@ -14,4 +14,4 @@ void print_message(const char *msg);
  */
 void print_error(const char *msg);
 
-#endif
+#endif /* UTILS_H */

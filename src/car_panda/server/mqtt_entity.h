@@ -1,8 +1,8 @@
 #ifndef SENDER_H
 #define SENDER_H
-#include <semaphore.h>
 
 #include <mosquittopp.h>
+#include <semaphore.h>
 
 class Mqtt_Entity : public mosqpp::mosquittopp
 {

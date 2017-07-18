@@ -53,4 +53,4 @@ class Servo
         int maestroGetMovingState();
 };
 
-#endif
+#endif /* SERVO_H */

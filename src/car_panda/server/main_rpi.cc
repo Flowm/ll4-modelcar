@@ -1,8 +1,10 @@
 #include "mqtt_entity.h"
 #include "servo.h"
+
 #include <unistd.h>
-#include <iostream>
 #include <string.h>
+
+#include <iostream>
 
 int main(int argc, char *argv[]) {
     char cmd[20];
