@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
     Mqtt_Entity *mqtt_entity = new Mqtt_Entity("car-state");
     Servo *servo = new Servo("/dev/ttyUSB0");
 
-    mqtt_entity->my_subscribe("car-control");
+    mqtt_entity->my_subscribe("car-servo");
 
     while (true) {
         sem_wait(&mqtt_entity->msgSem);
