@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
     double value;
     int servoVal;
 
-    Mqtt_Entity *mqtt_entity = new Mqtt_Entity("car-servo");
+    Mqtt_Entity *mqtt_entity = new Mqtt_Entity("panda", "car-servo");
     Controller *controller = new Controller();
 
     mqtt_entity->my_subscribe("car-control");

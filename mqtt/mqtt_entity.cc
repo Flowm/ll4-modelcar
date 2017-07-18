@@ -2,8 +2,8 @@
 #include <string.h>
 #include <iostream>
 
-Mqtt_Entity::Mqtt_Entity(const char *topic)
-    : mosqpp::mosquittopp(NULL), topic(topic) {
+Mqtt_Entity::Mqtt_Entity(const char* id, const char *topic)
+    : mosqpp::mosquittopp(id), topic(topic) {
 
         this->keepalive = 60;
         this->host = "localhost";
