@@ -1,4 +1,5 @@
 #include "mqtt_entity.h"
+#include <base/printf.h>
 #include <string.h>
 #include <iostream>
 
