@@ -19,7 +19,7 @@ class Mqtt_Entity : public mosqpp::mosquittopp
         void on_publish(int mid);
         void on_message(const struct mosquitto_message *message);
     public:
-        Mqtt_Entity(const char* id, const char *topic);
+        Mqtt_Entity(const char* id, const char *topic, const char* host);
         ~Mqtt_Entity();
         bool send_message(const char *message);
         bool my_subscribe(const char *topic);

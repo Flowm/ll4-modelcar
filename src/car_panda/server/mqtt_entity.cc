@@ -3,11 +3,11 @@
 #include <string.h>
 #include <iostream>
 
-Mqtt_Entity::Mqtt_Entity(const char* id, const char *topic)
+Mqtt_Entity::Mqtt_Entity(const char* id, const char *topic, const char* host)
     : mosqpp::mosquittopp(id), topic(topic) {
 
         this->keepalive = 60;
-        this->host = "localhost";
+        this->host = host;
         this->port = 1883;
 
         //sem_init(&msgSem, 0, 0);

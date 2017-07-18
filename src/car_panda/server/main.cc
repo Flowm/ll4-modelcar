@@ -104,7 +104,7 @@ int main(void)
     timer.msleep(10000);
     PDBG("Connecting to MQTT server");
 
-    Mqtt_Entity *mqtt_entity = new Mqtt_Entity("panda", "car-servo");
+    Mqtt_Entity *mqtt_entity = new Mqtt_Entity("panda", "car-servo", ip_addr);
     Controller *controller = new Controller();
 
     mqtt_entity->my_subscribe("car-control");
