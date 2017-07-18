@@ -4,10 +4,10 @@ CC = g++
 all: panda rpi
     
 panda:
-	$(CC) -o main_panda $(OBJS) main_panda.cc -lmosquittopp -lpthread
+	$(CC) -o main_panda $(OBJS) main_panda.cc -lmosquittopp -lpthread -std=c++11
     
 rpi:
-	$(CC) -o main_rpi $(OBJS) main_rpi.cc -lmosquittopp -lpthread
+	$(CC) -o main_rpi $(OBJS) main_rpi.cc -lmosquittopp -lpthread -std=c++11
 
 
 clean:
