@@ -1,5 +1,6 @@
 TARGET = hello_server
-SRC_CC = main.cc sender.cc
-LIBS   = base libprotobuf libmosquitto stdcxx lwip
+SRC_CC = main.cc controller.cc mqtt_entity.cc 
+
+LIBS   = base libprotobuf libmosquitto stdcxx lwip pthread
 
 INC_DIR += $(call select_from_repositories,include/lwip) 
