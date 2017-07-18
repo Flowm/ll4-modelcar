@@ -43,7 +43,7 @@ int Servo::maestroSetTarget(unsigned char channel, unsigned short target) {
         return -1;
     }
 
-    unsigned char command[] = {0x84, channel, target & 0x7F, target >> 7 & 0x7F};
+    unsigned char command[] = {0x84, channel, (unsigned char)(target & 0x7F), (unsigned char)(target >> 7 & 0x7F)};
     if (write(fd, command, sizeof(command)) == -1) {
         printError("error writing");
         return -1;
@@ -57,7 +57,7 @@ int Servo::maestroSetSpeed(unsigned char channel, unsigned short speed) {
         return -1;
     }
 
-    unsigned char command[] = {0x87, channel, speed & 0x7F, speed >> 7 & 0x7F };
+    unsigned char command[] = {0x87, channel, (unsigned char)(speed & 0x7F), (unsigned char)(speed >> 7 & 0x7F)};
     if (write(fd, command, sizeof(command)) == -1) {
         printError("error writing");
         return -1;
@@ -71,12 +71,12 @@ int Servo::maestroSetAcceleration(unsigned char channel, unsigned short acc) {
         return -1;
     }
 
-    if (acc  > 255) {
+    if (acc > 255) {
         printError("Invalid target acceleration - range is 0 to 255");
         return -1;
     }
 
-    unsigned char command[] = {0x89, channel, acc & 0x7F, acc >> 7 & 0x7F };
+    unsigned char command[] = {0x89, channel, (unsigned char)(acc & 0x7F), (unsigned char)(acc >> 7 & 0x7F)};
     if (write(fd, command, sizeof(command)) == -1) {
         printError("error writing");
         return -1;
