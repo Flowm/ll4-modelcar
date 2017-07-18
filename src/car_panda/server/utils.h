@@ -1,5 +1,5 @@
-#ifndef UTILITIES_H
-#define UTILITIES_H
+#ifndef UTILS_H
+#define UTILS_H
 
 // Comment the following line out if you're not building for Genode
 //#define GENODE

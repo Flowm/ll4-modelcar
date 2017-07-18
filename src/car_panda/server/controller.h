@@ -1,8 +1,6 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "utilities.h"
-
 class Controller
 {
     private:

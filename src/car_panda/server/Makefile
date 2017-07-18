@@ -1,4 +1,4 @@
-OBJS = mqtt_entity.cc servo.cc utilities.cc controller.cc
+OBJS = mqtt_entity.cc servo.cc utils.cc controller.cc
 CC = g++
 
 all: panda rpi

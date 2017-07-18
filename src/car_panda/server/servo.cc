@@ -1,5 +1,5 @@
 #include "servo.h"
-#include "utilities.h"
+#include "utils.h"
 
 #include <fcntl.h>
 #include <unistd.h>
