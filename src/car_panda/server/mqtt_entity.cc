@@ -39,23 +39,23 @@ void Mqtt_Entity::getCmd(char *buffer, size_t size) {
 
 void Mqtt_Entity::on_connect(int rc) {
     if (rc == 0) {
-        std::cout << ">> Mqtt_Entity - connected with server" << std::endl;
+        PDBG("Mqtt_Entity - connected with server");
     } else {
-        std::cout << ">> Mqtt_Entity - could not connect with server" << std::endl;
+        PDBG("Mqtt_Entity - could not connect with server");
     }
 };
 
 void Mqtt_Entity::on_disconnect(int rc) {
-    std::cout << ">> Mqtt_Entity - disconnected from server" << std::endl;
+    PDBG("Mqtt_Entity - disconnected from server");
 };
 
 void Mqtt_Entity::on_publish(int mid) {
-    std::cout << ">> Mqtt_Entity - message " << mid << " published" << std::endl;
+    PDBG("Mqtt_Entity - message %d published", mid);
 };
 
 void Mqtt_Entity::on_message(const struct mosquitto_message *message) {
     char *msg = (char*) message->payload;
-    std::cout << ">> Mqtt_Entity - message received " << msg << std::endl;
+    PDBG("Mqtt_Entity - message received %s", msg);
     strncpy(cmd, msg, sizeof(cmd));
     //sem_post(&msgSem);
 }
