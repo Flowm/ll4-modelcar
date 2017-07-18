@@ -3,16 +3,18 @@
 #include <unistd.h>
 #include <iostream>
 #include <string.h>
+#include <string>
+#include <stdio.h>
 
 #define STEER_CHANNEL "6"
 #define BRAKE_LEFT_FRONT_CHANNEL "1"
 #define BRAKE_RIGHT_FRONT_CHANNEL "2"
 #define BRAKE_REAR_CHANNEL "0"
 
-static enum IDs {
-    STEER = 0; // [-1;1]
-    BRAKE = 1; // [0;1]
-    ACCEL = 2; // [0,1]
+enum IDs {
+    STEER = 0,	// [-1;1]
+    BRAKE = 1,	// [0;1]
+    ACCEL = 2	// [0,1]
 };
 
 
@@ -43,7 +45,7 @@ int main(int argc, char *argv[]) {
         if (!target) {
             continue;
         }
-        value = stod(target);
+        value = std::stod(target);
 
         switch (strtoul(id, NULL, 0)) {
             case STEER :
@@ -52,7 +54,7 @@ int main(int argc, char *argv[]) {
                 mqtt_entity->send_message(servo_cmd);
                 break;
             case BRAKE :
-                servoVal = controller->tranfrom_brake(value);
+                servoVal = controller->transform_brake(value);
                 snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_LEFT_FRONT_CHANNEL, servoVal);
                 mqtt_entity->send_message(servo_cmd);
                 snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_RIGHT_FRONT_CHANNEL, servoVal);

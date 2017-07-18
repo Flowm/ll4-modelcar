@@ -19,6 +19,6 @@ class Controller
          */
         int transform_brake(double value);
         
-}
+};
 
 #endif
