@@ -1,5 +1,5 @@
 TARGET = hello_server
-SRC_CC = main.cc controller.cc mqtt_entity.cc 
+SRC_CC = main.cc controller.cc mqtt_entity.cc utilities.cc
 
 LIBS   = base libprotobuf libmosquitto stdcxx lwip pthread
 

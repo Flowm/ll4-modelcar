@@ -55,9 +55,6 @@ set config {
 		<resource name="RAM" quantum="1M"/>
 		<provides><service name="Timer"/></provides>
 	</start>
-	<start name="hello_client">
-		<resource name="RAM" quantum="1M"/>
-	</start>
 }
 
 append_if [have_spec gpio] config {
@@ -105,7 +102,7 @@ append qemu_args "-net nic,model=lan9118,macaddr=02:00:00:00:01:01 "
 # Boot image
 #
 
-set boot_modules { core init hello_client hello_server timer libprotobuf.lib.so libmosquitto.lib.so libc.lib.so stdcxx.lib.so lwip.lib.so libssl.lib.so libcrypto.lib.so ld.lib.so libm.lib.so pthread.lib.so }
+set boot_modules { core init hello_server timer libprotobuf.lib.so libmosquitto.lib.so libc.lib.so stdcxx.lib.so lwip.lib.so libssl.lib.so libcrypto.lib.so ld.lib.so libm.lib.so pthread.lib.so }
 
 # platform-specific modules
 lappend_if $use_usb_driver              boot_modules usb_drv
