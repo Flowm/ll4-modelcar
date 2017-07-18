@@ -2,7 +2,7 @@
 
 int Controller::transform_steer(double value) {
     if (value < -1 || value > 1) {
-        printError("Invalid steering angle - range is -1 to 1");
+        print_error("Invalid steering angle - range is -1 to 1");
         return -1;
     }
 
@@ -12,7 +12,7 @@ int Controller::transform_steer(double value) {
 
 int Controller::transform_brake(double value) {
     if (value < 0 || value > 1) {
-        printError("Invalid target brake position - range is 0 to 1");
+        print_error("Invalid target brake position - range is 0 to 1");
         return -1;
     }
 

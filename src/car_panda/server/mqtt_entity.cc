@@ -1,7 +1,7 @@
 #include "mqtt_entity.h"
-#include <base/printf.h>
+#include "utilities.h" 
 #include <string.h>
-#include <iostream>
+#include <stdio.h> 
 
 Mqtt_Entity::Mqtt_Entity(const char* id, const char *topic, const char* host)
     : mosqpp::mosquittopp(id), topic(topic) {
@@ -40,23 +40,25 @@ void Mqtt_Entity::getCmd(char *buffer, size_t size) {
 
 void Mqtt_Entity::on_connect(int rc) {
     if (rc == 0) {
-        PDBG("Mqtt_Entity - connected with server");
+        print_message("Mqtt_Entity - connected with server");
     } else {
-        PDBG("Mqtt_Entity - could not connect with server");
+        print_error("Mqtt_Entity - could not connect with server");
     }
 };
 
 void Mqtt_Entity::on_disconnect(int rc) {
-    PDBG("Mqtt_Entity - disconnected from server");
+    print_message("Mqtt_Entity - disconnected from server");
 };
 
 void Mqtt_Entity::on_publish(int mid) {
-    PDBG("Mqtt_Entity - message %d published", mid);
+	snprintf(msg_buffer, sizeof(msg_buffer), "Mqtt_Entity - message %d published", mid);
+    print_message(msg_buffer);
 };
 
 void Mqtt_Entity::on_message(const struct mosquitto_message *message) {
     char *msg = (char*) message->payload;
-    PDBG("Mqtt_Entity - message received %s", msg);
+	snprintf(msg_buffer, sizeof(msg_buffer), "Mqtt_Entity - message received %s", msg);
+    print_message(msg_buffer);
     strncpy(cmd, msg, sizeof(cmd));
     sem_post(&msgSem);
 }

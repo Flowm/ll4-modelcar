@@ -1,7 +1,17 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
-// print an error message
-void printError(const char *msg);
+// Comment the following line out if you're not building for Genode
+//#define GENODE
+
+/**
+ * print a message to the screen
+ */
+void print_message(const char *msg);
+
+/**
+ * print an error message to the screen
+ */
+void print_error(const char *msg);
 
 #endif

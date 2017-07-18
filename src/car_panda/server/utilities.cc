@@ -1,10 +1,24 @@
 #include "utilities.h"
-#include <base/env.h>
-#include <base/printf.h>
 
-//#include <iostream>
+#ifdef GENODE
+	#include <base/env.h>
+	#include <base/printf.h>
+#else
+	#include <iostream>
+#endif
 
-void printError(const char *msg) {
-    PERR("ERROR %s", msg);
-    //std::cerr << "ERROR >> " << msg << std::endl;
+void print_message(const char *msg) {
+#ifdef GENODE
+	PDBG("%s", msg);
+#else
+	std::cout << msg << std::endl;
+#endif	
+}
+
+void print_error(const char *msg) {
+#ifdef GENODE
+	PDBG("ERROR >> %s", msg);
+#else
+	std::cout << "ERROR >> " << msg << std::endl;
+#endif	
 }

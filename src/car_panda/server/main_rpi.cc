@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
     char cmd[20];
     char *split, *channel, *target;
 
-    Mqtt_Entity *mqtt_entity = new Mqtt_Entity("rpi", "car-state");
+    Mqtt_Entity *mqtt_entity = new Mqtt_Entity("rpi", "car-state", "localhost");
     Servo *servo = new Servo("/dev/ttyUSB0");
 
     mqtt_entity->my_subscribe("car-servo");
