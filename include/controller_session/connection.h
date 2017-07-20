@@ -1,3 +1,5 @@
+#pragma once
+
 #include <controller_session/client.h>
 #include <base/connection.h>
 
