@@ -40,18 +40,18 @@ int main(void)
   Genode::Xml_node network = Genode::config()->xml_node().sub_node("network");
 
   if (network.attribute_value<bool>("dhcp", true)) {
-    print_message("DHCP network...");
+    PDBG("DHCP network...");
     if (lwip_nic_init(0,
           0,
           0,
           BUF_SIZE,
           BUF_SIZE)) {
-      print_error("lwip init failed!");
+      PERR("lwip init failed!");
       return 1;
     }
-    print_message("done");
+    PDBG("done");
   } else {
-    print_message("manual network...");
+    PDBG("manual network...");
     char ip_addr[16] = {0};
     char subnet[16] = {0};
     char gateway[16] = {0};
@@ -65,10 +65,10 @@ int main(void)
           inet_addr(gateway),
           BUF_SIZE,
           BUF_SIZE)) {
-      print_error("lwip init failed!");
+      PERR("lwip init failed!");
       return 1;
     }
-    print_message("done");
+    PDBG("done");
   }
 
   /* get config */
@@ -89,7 +89,7 @@ int main(void)
     int servoVal;
 
     timer.msleep(10000);
-    print_message("Connecting to MQTT server");
+    PDBG("Connecting to MQTT server");
 
     Mqtt_Entity *mqtt_entity = new Mqtt_Entity("panda", "car-servo", ip_addr);
     Controller *controller = new Controller();
