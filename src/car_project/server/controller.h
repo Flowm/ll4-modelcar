@@ -13,12 +13,12 @@ class Controller
          * Transforms steering values to concrete servo values
          */
         int transform_steer(double value);
-        
+
         /**
          * Transforms braking values to concrete servo values
          */
         int transform_brake(double value);
-        
+
 };
 
 #endif

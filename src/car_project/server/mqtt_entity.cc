@@ -1,8 +1,8 @@
 #include "mqtt_entity.h"
-#include "utils.h" 
+#include "utils.h"
 
 #include <string.h>
-#include <stdio.h> 
+#include <stdio.h>
 
 Mqtt_Entity::Mqtt_Entity(const char* id, const char *topic, const char* host)
     : mosqpp::mosquittopp(id), topic(topic) {
@@ -16,7 +16,7 @@ Mqtt_Entity::Mqtt_Entity(const char* id, const char *topic, const char* host)
         mosqpp::lib_init();
         connect(host, port, keepalive);
         loop_start();
-}
+    }
 
 Mqtt_Entity::~Mqtt_Entity() {
     while (want_write()) {}
@@ -52,13 +52,13 @@ void Mqtt_Entity::on_disconnect(int rc) {
 };
 
 void Mqtt_Entity::on_publish(int mid) {
-	snprintf(msg_buffer, sizeof(msg_buffer), "Mqtt_Entity - message %d published", mid);
+    snprintf(msg_buffer, sizeof(msg_buffer), "Mqtt_Entity - message %d published", mid);
     PDBG(msg_buffer);
 };
 
 void Mqtt_Entity::on_message(const struct mosquitto_message *message) {
     char *msg = (char*) message->payload;
-	snprintf(msg_buffer, sizeof(msg_buffer), "Mqtt_Entity - message received %s", msg);
+    snprintf(msg_buffer, sizeof(msg_buffer), "Mqtt_Entity - message received %s", msg);
     PDBG(msg_buffer);
     strncpy(cmd, msg, sizeof(cmd));
     sem_post(&msgSem);

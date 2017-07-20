@@ -33,52 +33,52 @@ using namespace Genode;
 
 int main(void)
 {
-  Timer::Connection timer;
+    Timer::Connection timer;
 
-  enum { BUF_SIZE = Nic::Packet_allocator::DEFAULT_PACKET_SIZE * 128 };
+    enum { BUF_SIZE = Nic::Packet_allocator::DEFAULT_PACKET_SIZE * 128 };
 
-  Genode::Xml_node network = Genode::config()->xml_node().sub_node("network");
+    Genode::Xml_node network = Genode::config()->xml_node().sub_node("network");
 
-  if (network.attribute_value<bool>("dhcp", true)) {
-    PDBG("DHCP network...");
-    if (lwip_nic_init(0,
-          0,
-          0,
-          BUF_SIZE,
-          BUF_SIZE)) {
-      PERR("lwip init failed!");
-      return 1;
+    if (network.attribute_value<bool>("dhcp", true)) {
+        PDBG("DHCP network...");
+        if (lwip_nic_init(0,
+                    0,
+                    0,
+                    BUF_SIZE,
+                    BUF_SIZE)) {
+            PERR("lwip init failed!");
+            return 1;
+        }
+        PDBG("done");
+    } else {
+        PDBG("manual network...");
+        char ip_addr[16] = {0};
+        char subnet[16] = {0};
+        char gateway[16] = {0};
+
+        network.attribute("ip-address").value(ip_addr, sizeof(ip_addr));
+        network.attribute("subnet-mask").value(subnet, sizeof(subnet));
+        network.attribute("default-gateway").value(gateway, sizeof(gateway));
+
+        if (lwip_nic_init(inet_addr(ip_addr),
+                    inet_addr(subnet),
+                    inet_addr(gateway),
+                    BUF_SIZE,
+                    BUF_SIZE)) {
+            PERR("lwip init failed!");
+            return 1;
+        }
+        PDBG("done");
     }
-    PDBG("done");
-  } else {
-    PDBG("manual network...");
+
+    /* get config */
+    Genode::Xml_node mosquitto = Genode::config()->xml_node().sub_node("mosquitto");
+
     char ip_addr[16] = {0};
-    char subnet[16] = {0};
-    char gateway[16] = {0};
+    char port[5] = {0};
 
-    network.attribute("ip-address").value(ip_addr, sizeof(ip_addr));
-    network.attribute("subnet-mask").value(subnet, sizeof(subnet));
-    network.attribute("default-gateway").value(gateway, sizeof(gateway));
-
-    if (lwip_nic_init(inet_addr(ip_addr),
-          inet_addr(subnet),
-          inet_addr(gateway),
-          BUF_SIZE,
-          BUF_SIZE)) {
-      PERR("lwip init failed!");
-      return 1;
-    }
-    PDBG("done");
-  }
-
-  /* get config */
-  Genode::Xml_node mosquitto = Genode::config()->xml_node().sub_node("mosquitto");
-
-  char ip_addr[16] = {0};
-  char port[5] = {0};
-
-  mosquitto.attribute("ip-address").value(ip_addr, sizeof(ip_addr));
-  mosquitto.attribute("port").value(port, sizeof(port));
+    mosquitto.attribute("ip-address").value(ip_addr, sizeof(ip_addr));
+    mosquitto.attribute("port").value(port, sizeof(port));
 
 
     char recv_cmd[50];

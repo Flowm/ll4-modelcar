@@ -13,7 +13,7 @@ class Mqtt_Entity : public mosqpp::mosquittopp
         int keepalive;
 
         char cmd[20];
-		char msg_buffer[100];
+        char msg_buffer[100];
 
         void on_connect(int rc);
         void on_disconnect(int rc);
