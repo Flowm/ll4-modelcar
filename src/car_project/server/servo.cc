@@ -14,7 +14,6 @@ Servo::Servo(Terminal::Connection *terminal)
 }
 
 Servo::~Servo() {
-	close(fd);
 }
 
 int Servo::maestroSetTarget(unsigned char channel, unsigned short target) {

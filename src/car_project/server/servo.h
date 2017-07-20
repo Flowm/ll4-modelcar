@@ -4,15 +4,14 @@
 class Servo
 {
     private:
-        // filedescriptor of the device where the servocontroller is connected to
-        int fd;
+        Terminal::Connection *_terminal;
     
     public:
         /**
          * Constructor of the Servo class
          * @param device    the unix device where the servocontroller is conected to
          */
-        Servo(const char *device);
+        Servo(Terminal::Connection *terminal);
         ~Servo();
 
         /**
