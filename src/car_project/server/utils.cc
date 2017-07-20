@@ -1,7 +1,6 @@
 #include "utils.h"
 
 #ifdef GENODE
-	#include <base/env.h>
 	#include <base/printf.h>
 #else
 	#include <iostream>
@@ -17,7 +16,7 @@ void print_message(const char *msg) {
 
 void print_error(const char *msg) {
 #ifdef GENODE
-	PDBG("ERROR >> %s", msg);
+	PERR("ERROR >> %s", msg);
 #else
 	std::cout << "ERROR >> " << msg << std::endl;
 #endif	

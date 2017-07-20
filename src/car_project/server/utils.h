@@ -2,7 +2,7 @@
 #define UTILS_H
 
 // Comment the following line out if you're not building for Genode
-//#define GENODE
+#define GENODE
 
 /**
  * print a message to the screen
