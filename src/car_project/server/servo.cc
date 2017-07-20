@@ -23,6 +23,8 @@ Servo::Servo(const char *device) {
 	options.c_iflag &= ~(INLCR | IGNCR | ICRNL | IXON | IXOFF);
 	options.c_oflag &= ~(ONLCR | OCRNL);
 	options.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+	options.c_ispeed = 115200;
+	options.c_ospeed = 115200;
 	tcsetattr(fd, TCSANOW, &options);
 
 	std::cout << "Servo initialized" << std::endl;
