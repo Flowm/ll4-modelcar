@@ -35,7 +35,7 @@ bool Mqtt_Entity::my_subscribe(const char *topic) {
     return (ret == MOSQ_ERR_SUCCESS);
 }
 
-void Mqtt_Entity::getCmd(char *buffer, size_t size) {
+void Mqtt_Entity::get_cmd(char *buffer, size_t size) {
     strncpy(buffer, cmd, size);
 }
 

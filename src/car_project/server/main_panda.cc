@@ -98,7 +98,7 @@ int main(void)
 
     while (true) {
         sem_wait(&mqtt_entity->msgSem);
-        mqtt_entity->getCmd(recv_cmd, sizeof(recv_cmd));
+        mqtt_entity->get_cmd(recv_cmd, sizeof(recv_cmd));
 
         split = strtok(recv_cmd, ",");
         if (!split) {

@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 
     while (true) {
         sem_wait(&mqtt_entity->msgSem);
-        mqtt_entity->getCmd(cmd, sizeof(cmd));
+        mqtt_entity->get_cmd(cmd, sizeof(cmd));
 
         // Send to polulu
         split = strtok(cmd, ",");
