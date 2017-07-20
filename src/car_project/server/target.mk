@@ -1,5 +1,5 @@
-TARGET = car_project
-SRC_CC = main.cc controller.cc mqtt_entity.cc utils.cc
+TARGET = server
+SRC_CC = main.cc mqtt_entity.cc
 
 LIBS   = base libprotobuf libmosquitto stdcxx lwip libc_lwip pthread
 

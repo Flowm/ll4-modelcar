@@ -43,14 +43,18 @@ set config {
 		<any-service> <parent/> <any-child/> </any-service>
 	</default-route>
 
-	<start name="car_project">
+	<start name="server">
 		<resource name="RAM" quantum="4M"/>
-		<provides><service name="Hello"/></provides>
 		<config>
 			<network dhcp="yes" ip-address="192.168.100.42" subnet-mask="255.255.255.0" default-gateway="192.168.100.254" />
 			<mosquitto ip-address="10.200.32.8" port="1883" />
         	</config>
 	</start>
+	<start name="controller">
+		<resource name="RAM" quantum="4M"/>
+		<provides><service name="Controller"/></provides>
+	</start>
+
 	<start name="timer">
 		<resource name="RAM" quantum="1M"/>
 		<provides><service name="Timer"/></provides>
@@ -102,7 +106,7 @@ append qemu_args "-net nic,model=lan9118,macaddr=02:00:00:00:01:01 "
 # Boot image
 #
 
-set boot_modules { core init car_project timer libprotobuf.lib.so libmosquitto.lib.so libc.lib.so stdcxx.lib.so lwip.lib.so libssl.lib.so libcrypto.lib.so ld.lib.so libm.lib.so pthread.lib.so }
+set boot_modules { core init server controller timer libprotobuf.lib.so libmosquitto.lib.so libc.lib.so stdcxx.lib.so lwip.lib.so libssl.lib.so libcrypto.lib.so ld.lib.so libm.lib.so pthread.lib.so }
 
 # platform-specific modules
 lappend_if $use_usb_driver              boot_modules usb_drv

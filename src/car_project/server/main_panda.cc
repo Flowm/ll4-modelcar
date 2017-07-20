@@ -8,6 +8,9 @@
 #include <timer_session/connection.h>
 #include <base/rpc_server.h>
 
+#include <controller_session/client.h>
+#include <controller_session/connection.h>
+
 extern "C" {
 #include <lwip/sockets.h>
 }
@@ -15,8 +18,7 @@ extern "C" {
 #include <nic/packet_allocator.h>
 
 #include "mqtt_entity.h"
-#include "controller.h"
-#include "utils.h"
+
 
 #define STEER_CHANNEL "6"
 #define BRAKE_LEFT_FRONT_CHANNEL "1"
@@ -92,10 +94,12 @@ int main(void)
     PDBG("Connecting to MQTT server");
 
     Mqtt_Entity *mqtt_entity = new Mqtt_Entity("panda", "car-servo", ip_addr);
-    Controller *controller = new Controller();
 
     mqtt_entity->my_subscribe("car-control");
 
+    PDBG("Before Controller");
+    Controller::Connection controller;
+    PDBG("After Controller");
     while (true) {
         sem_wait(&mqtt_entity->msgSem);
         mqtt_entity->get_cmd(recv_cmd, sizeof(recv_cmd));
@@ -114,12 +118,12 @@ int main(void)
 
         switch (strtoul(id, NULL, 0)) {
             case STEER :
-                servoVal = controller->transform_steer(value);
+                servoVal = controller.transform_steer(value);
                 snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", STEER_CHANNEL, servoVal);
                 mqtt_entity->send_message(servo_cmd);
                 break;
             case BRAKE :
-                servoVal = controller->transform_brake(value);
+                servoVal = controller.transform_brake(value);
                 snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_LEFT_FRONT_CHANNEL, servoVal);
                 mqtt_entity->send_message(servo_cmd);
                 snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_RIGHT_FRONT_CHANNEL, servoVal);
@@ -137,7 +141,6 @@ int main(void)
     }
 
     delete mqtt_entity;
-    delete controller;
 
     sleep_forever();
 
