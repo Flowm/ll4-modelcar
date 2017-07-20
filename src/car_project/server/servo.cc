@@ -1,33 +1,16 @@
 #include "servo.h"
 #include "utils.h"
 
-#include <fcntl.h>
-#include <unistd.h>
-#include <termios.h>
-#include <stdio.h>
+#include <base/printf.h>
+#include <base/sleep.h>
+#include <base/rpc_server.h>
 
-#include <iostream>
+#include <root/component.h>
+#include <terminal_session/connection.h>
 
-Servo::Servo(const char *device) {
-	fd = open(device, O_RDWR | O_NOCTTY);
-	if (fd < 0) {
-		char buffer[50];
-		sprintf(buffer, "Could not open device %s", device);
-		PERR(buffer);
-		return;
-	}
-
-	// set options for termios
-	struct termios options;
-	tcgetattr(fd, &options);
-	options.c_iflag &= ~(INLCR | IGNCR | ICRNL | IXON | IXOFF);
-	options.c_oflag &= ~(ONLCR | OCRNL);
-	options.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
-	options.c_ispeed = 115200;
-	options.c_ospeed = 115200;
-	tcsetattr(fd, TCSANOW, &options);
-
-	std::cout << "Servo initialized" << std::endl;
+Servo::Servo(Terminal::Connection *terminal)
+            : _terminal(terminal){
+	PDBG("Servo initialized");
 }
 
 Servo::~Servo() {
@@ -46,7 +29,7 @@ int Servo::maestroSetTarget(unsigned char channel, unsigned short target) {
 	}
 
 	unsigned char command[] = {0x84, channel, (unsigned char)(target & 0x7F), (unsigned char)(target >> 7 & 0x7F)};
-	if (write(fd, command, sizeof(command)) == -1) {
+	if (_terminal->write(command, sizeof(command)) < sizeof(command)) {
 		PERR("error writing");
 		return -1;
 	}
@@ -60,7 +43,7 @@ int Servo::maestroSetSpeed(unsigned char channel, unsigned short speed) {
 	}
 
 	unsigned char command[] = {0x87, channel, (unsigned char)(speed & 0x7F), (unsigned char)(speed >> 7 & 0x7F)};
-	if (write(fd, command, sizeof(command)) == -1) {
+	if (_terminal->write(command, sizeof(command)) < sizeof(command)) {
 		PERR("error writing");
 		return -1;
 	}
@@ -79,7 +62,7 @@ int Servo::maestroSetAcceleration(unsigned char channel, unsigned short acc) {
 	}
 
 	unsigned char command[] = {0x89, channel, (unsigned char)(acc & 0x7F), (unsigned char)(acc >> 7 & 0x7F)};
-	if (write(fd, command, sizeof(command)) == -1) {
+	if (_terminal->write(command, sizeof(command)) < sizeof(command)) {
 		PERR("error writing");
 		return -1;
 	}
@@ -93,13 +76,13 @@ int Servo::maestroGetPosition(unsigned char channel) {
 	}
 
 	unsigned char command[] = {0x90, channel};
-	if(write(fd, command, sizeof(command)) == -1) {
+	if(_terminal->write(command, sizeof(command)) < sizeof(command)) {
 		PERR("error writing");
 		return -1;
 	}
 
 	unsigned char response[2];
-	if(read(fd,response,2) != 2) {
+	if(_terminal->read(response,2) != 2) {
 		PERR("error reading");
 		return -1;
 	}
@@ -109,17 +92,16 @@ int Servo::maestroGetPosition(unsigned char channel) {
 
 int Servo::maestroGetMovingState() {
 	unsigned char command[] = {0x93};
-	if(write(fd, command, sizeof(command)) == -1) {
+	if(_terminal->write(command, sizeof(command)) < sizeof(command)) {
 		PERR("error writing");
 		return -1;
 	}
 
 	unsigned char response[1];
-	if(read(fd, response, 1) != 1) {
+	if(_terminal->read(response, 1) != 1) {
 		PERR("error reading");
 		return -1;
 	}
 
 	return response[0];
-
 }
