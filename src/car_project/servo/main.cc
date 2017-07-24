@@ -35,7 +35,7 @@ namespace Servo {
 
                 return (SERVO_UPPER_BOUND - SERVO_LOWER_BOUND) * value + SERVO_LOWER_BOUND;
             }
-            
+
             int Servo::maestroSetTarget(unsigned char channel, unsigned short target) {
                 if (channel > 11) {
                     PERR("Channel does not exist");
@@ -149,7 +149,7 @@ int main(void) {
 
     using namespace Genode;
     using namespace Servo;
-    
+
     PDBG("in main before cap");
 
     /*
@@ -157,18 +157,18 @@ int main(void) {
      * are able to create capabilities.
      */
     Cap_connection cap;
-    
+
     PDBG("in main after cap");
 
     enum { STACK_SIZE = 4096 };
     static Rpc_entrypoint ep(&cap, STACK_SIZE, "Servo_ep");
-    
+
     PDBG("in main after rpc entrypoint");
 
     static Servo_root Servo_root(&ep, env()->heap());
 
     PDBG("in main after rpc Servo_root");
-    
+
     /*
      * Announce services
      */

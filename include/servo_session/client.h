@@ -5,15 +5,15 @@
 #include <base/printf.h>
 
 namespace Servo {
-	struct Session_client : Genode::Rpc_client<Session> {
+    struct Session_client : Genode::Rpc_client<Session> {
 
-		Session_client(Genode::Capability<Session> cap)
-			: Genode::Rpc_client<Session>(cap) {}
+        Session_client(Genode::Capability<Session> cap)
+            : Genode::Rpc_client<Session>(cap) {}
 
         /**
          * Sets the target position of the servo
-         * @param channel	channel where the servo is connected
-         * @param target	target position in quarter microseconds
+         * @param channel   channel where the servo is connected
+         * @param target    target position in quarter microseconds
          * @return  returns -1 if error ocured else 0
          */
         int setTarget(unsigned char channel, unsigned short target){
@@ -22,8 +22,8 @@ namespace Servo {
 
         /**
          * Sets the maximum speed of the servo
-         * @param channel	channel where the servo is connected
-         * @param speed		maximum speed in quarter milliseconds. 0 means unlimited.
+         * @param channel   channel where the servo is connected
+         * @param speed     maximum speed in quarter milliseconds. 0 means unlimited.
          * @return  returns -1 if error ocured else 0
          */
         int setSpeed(unsigned char channel, unsigned short speed){
@@ -32,8 +32,8 @@ namespace Servo {
 
         /**
          * Sets the maximum accleration of the servo
-         * @param channel	    channel where the servo is connected
-         * @param accleration	maximum accleration as value between 1 and 255. 0 means unlimited
+         * @param channel       channel where the servo is connected
+         * @param accleration   maximum accleration as value between 1 and 255. 0 means unlimited
          * @return  returns -1 if error ocured else 0
          */
         int setAcceleration(unsigned char channel, unsigned short acc){
@@ -42,7 +42,7 @@ namespace Servo {
 
         /**
          * Gets the current position of the servo
-         * @param channel	channel where the servo is connected
+         * @param channel   channel where the servo is connected
          * @return  returns -1 if error ocured else the current position
          */
         int getPosition(unsigned char channel){
@@ -57,6 +57,6 @@ namespace Servo {
             return call<Rpc_getMovingState>();
         }
 
-	};
+    };
 
 }

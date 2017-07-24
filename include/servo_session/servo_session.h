@@ -13,31 +13,31 @@ namespace Servo {
 
         /**
          * Sets the target position of the servo
-         * @param channel	channel where the servo is connected
-         * @param target	target position in quarter microseconds
+         * @param channel   channel where the servo is connected
+         * @param target    target position in quarter microseconds
          * @return  returns -1 if error ocured else 0
          */
         virtual int setTarget(unsigned char channel, unsigned short target) = 0;
 
         /**
          * Sets the maximum speed of the servo
-         * @param channel	channel where the servo is connected
-         * @param speed		maximum speed in quarter milliseconds. 0 means unlimited.
+         * @param channel   channel where the servo is connected
+         * @param speed     maximum speed in quarter milliseconds. 0 means unlimited.
          * @return  returns -1 if error ocured else 0
          */
         virtual int setSpeed(unsigned char channel, unsigned short speed) = 0;
 
         /**
          * Sets the maximum accleration of the servo
-         * @param channel	    channel where the servo is connected
-         * @param accleration	maximum accleration as value between 1 and 255. 0 means unlimited
+         * @param channel       channel where the servo is connected
+         * @param accleration   maximum accleration as value between 1 and 255. 0 means unlimited
          * @return  returns -1 if error ocured else 0
          */
         virtual int setAcceleration(unsigned char channel, unsigned short acc) = 0;
 
         /**
          * Gets the current position of the servo
-         * @param channel	channel where the servo is connected
+         * @param channel   channel where the servo is connected
          * @return  returns -1 if error ocured else the current position
          */
         virtual int getPosition(unsigned char channel) = 0;
