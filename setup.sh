@@ -1,10 +1,20 @@
 #!/usr/bin/env bash
-set -ex
+set -eux
 
-git clone https://github.com/argos-research/testbed.git
+OS_DIR=~/dev/operating-system
 
-git clone git@gitlab.lrz.de:lil4/carFranzG.git
+# Clone genode os repo
+if ! [ -d "$OS_DIR" ]; then
+    mkdir -p ${OS_DIR%/*}
+    git clone https://github.com/argos-research/operating-system $OS_DIR
+fi
+cd $OS_DIR
 
-git clone git@github.com:Flowm/operating-system.git
-cd operating-system
+# Initial setup
 ./provision.sh
+
+# Clone additional reposistories
+git clone https://github.com/argos-research/genode-world.git genode/repos/genode-world
+git clone git@gitlab.lrz.de:lil4/carFranzG.git genode/repos/model-car
+
+echo "Configuration of build dir $OS_DIR successful"
