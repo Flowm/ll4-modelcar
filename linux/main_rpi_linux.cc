@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     mqtt_entity->my_subscribe("car-servo");
 
     while (true) {
-        sem_wait(&mqtt_entity->msgSem);
+        mqtt_entity->wait();
         mqtt_entity->get_cmd(cmd, sizeof(cmd));
 
         // Send to polulu
