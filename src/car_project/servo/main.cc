@@ -15,30 +15,9 @@ namespace Servo {
     {
         private:
             Terminal::Connection* _terminal = new Terminal::Connection(_terminal);
-            const static int SERVO_UPPER_BOUND = 7500;
-            const static int SERVO_LOWER_BOUND = 4500;
 
         public:
-            int transform_steer(double value) {
-                if (value < -1 || value > 1) {
-                    PERR("Invalid steering angle - range is -1 to 1");
-                    return -1;
-                }
-
-                value = (value + 1)/2;
-                return (SERVO_UPPER_BOUND - SERVO_LOWER_BOUND) * value + SERVO_LOWER_BOUND;
-            }
-
-            int transform_brake(double value) {
-                if (value < 0 || value > 1) {
-                    PERR("Invalid target brake position - range is 0 to 1");
-                    return -1;
-                }
-
-                return (SERVO_UPPER_BOUND - SERVO_LOWER_BOUND) * value + SERVO_LOWER_BOUND;
-            }
-
-            int maestroSetTarget(unsigned char channel, unsigned short target) {
+            int setTarget(unsigned char channel, unsigned short target) {
                 if (channel > 11) {
                     PERR("Channel does not exist");
                     return -1;
@@ -57,7 +36,7 @@ namespace Servo {
                 return 0;
             }
 
-            int maestroSetSpeed(unsigned char channel, unsigned short speed) {
+            int setSpeed(unsigned char channel, unsigned short speed) {
                 if (channel > 11) {
                     PERR("Channel does not exist");
                     return -1;
@@ -71,7 +50,7 @@ namespace Servo {
                 return 0;
             }
 
-            int maestroSetAcceleration(unsigned char channel, unsigned short acc) {
+            int setAcceleration(unsigned char channel, unsigned short acc) {
                 if (channel > 11) {
                     PERR("Channel does not exist");
                     return -1;
@@ -90,7 +69,7 @@ namespace Servo {
                 return 0;
             }
 
-            int maestroGetPosition(unsigned char channel) {
+            int setPosition(unsigned char channel) {
                 if (channel > 11) {
                     PERR("Channel does not exist");
                     return -1;
@@ -111,7 +90,12 @@ namespace Servo {
                 return response[0] + 256*response[1];
             }
 
-            int maestroGetMovingState() {
+            int getPosition(unsigned char channel) {
+                // TODO: Not implemented yet
+                return 0
+            }
+
+            int getMovingState() {
                 unsigned char command[] = {0x93};
                 if(_terminal->write(command, sizeof(command)) < sizeof(command)) {
                     PERR("error writing");
