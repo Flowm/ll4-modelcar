@@ -14,7 +14,7 @@ namespace Servo {
     struct Servo_component : Genode::Rpc_object<Session>
     {
         private:
-            Terminal::Connection* _terminal;
+            Terminal::Connection* _terminal = new Terminal::Connection(_terminal);
 
         public:
             int transform_steer(double value) {
