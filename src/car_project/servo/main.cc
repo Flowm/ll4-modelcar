@@ -14,7 +14,7 @@ namespace Servo {
     struct Servo_component : Genode::Rpc_object<Session>
     {
         private:
-            Terminal::Connection* _terminal = new Terminal::Connection(_terminal);
+            Terminal::Connection* _terminal;
 
         public:
             int setTarget(unsigned char channel, unsigned short target) {
@@ -92,7 +92,7 @@ namespace Servo {
 
             int getPosition(unsigned char channel) {
                 // TODO: Not implemented yet
-                return 0
+                return 0;
             }
 
             int getMovingState() {
@@ -117,6 +117,9 @@ namespace Servo {
 
     class Servo_root : public Genode::Root_component<Servo_component>
     {
+        private:
+            Terminal::Connection *_terminal;
+
         protected:
             Servo_component *_create_session(const char *args) {
                 PDBG("Creating Servo session.");
@@ -124,8 +127,13 @@ namespace Servo {
             }
 
         public:
-            Servo_root(Genode::Rpc_entrypoint *ep, Genode::Allocator *allocator)
-                : Genode::Root_component<Servo_component>(ep, allocator) {
+            Servo_root(Genode::Rpc_entrypoint *ep,
+                       Genode::Allocator *allocator,
+                       Terminal::Connection *terminal)
+                : Genode::Root_component<Servo_component>(ep, allocator),
+                _terminal(terminal)
+
+            {
                     PDBG("Creating root component.");
             }
     };
@@ -136,7 +144,10 @@ int main(void) {
     using namespace Genode;
     using namespace Servo;
 
-    PDBG("in main before cap");
+    /*
+     * Open Terminal session
+     */
+    static Terminal::Connection terminal;
 
     /*
      * Get a session for the parent's capability service, so that we
@@ -144,14 +155,12 @@ int main(void) {
      */
     Cap_connection cap;
 
-    PDBG("in main after cap");
-
     enum { STACK_SIZE = 4096 };
     static Rpc_entrypoint ep(&cap, STACK_SIZE, "Servo_ep");
 
     PDBG("in main after rpc entrypoint");
 
-    static Servo_root Servo_root(&ep, env()->heap());
+    static Servo_root Servo_root(&ep, env()->heap(), &terminal);
 
     PDBG("in main after rpc Servo_root");
 
