@@ -23,8 +23,8 @@ enum IDs {
 int main(int argc, char *argv[]) {
     char recv_cmd[50];
     char servo_cmd[10];
-    
-    char *split, *id, *target; 
+
+    char *split, *id, *target;
     double value;
     int servoVal;
 
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     mqtt_entity->my_subscribe("car-control");
 
     while (true) {
-        sem_wait(&mqtt_entity->msgSem);
+        mqtt_entity->wait();
         mqtt_entity->get_cmd(recv_cmd, sizeof(recv_cmd));
 
         split = strtok(recv_cmd, ",");
@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
                 break;
             default :
                 servoVal = -1;
-                break;              
+                break;
         }
     }
 

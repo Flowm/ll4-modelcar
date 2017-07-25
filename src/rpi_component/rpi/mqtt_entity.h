@@ -11,10 +11,9 @@ class Mqtt_Entity : public mosqpp::mosquittopp
         const char *topic;
         int port;
         int keepalive;
-        sem_t msg_sem;
 
         char cmd[20];
-		char msg_buffer[100];
+        char msg_buffer[100];
 
         void on_connect(int rc);
         void on_disconnect(int rc);
@@ -26,8 +25,8 @@ class Mqtt_Entity : public mosqpp::mosquittopp
         bool send_message(const char *message);
         bool my_subscribe(const char *topic);
         void get_cmd(char *buffer, size_t size);
-        void wait();
 
+        sem_t msgSem;
 };
 
 #endif /* SENDER_H */

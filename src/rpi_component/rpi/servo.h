@@ -1,3 +1,4 @@
+// TODO: Remove
 #ifndef SERVO_H
 #define SERVO_H
 
@@ -5,7 +6,7 @@ class Servo
 {
     private:
         Terminal::Connection *_terminal;
-    
+
     public:
         /**
          * Constructor of the Servo class
@@ -37,7 +38,7 @@ class Servo
          * @return  returns -1 if error ocured else 0
          */
         int maestroSetAcceleration(unsigned char channel, unsigned short acc);
-        
+
         /**
          * Gets the current position of the servo
          * @param channel	channel where the servo is connected
