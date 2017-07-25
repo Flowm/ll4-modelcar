@@ -8,8 +8,8 @@
 #include <timer_session/connection.h>
 #include <base/rpc_server.h>
 
-#include <controller_session/client.h>
-#include <controller_session/connection.h>
+#include <servo_session/client.h>
+#include <servo_session/connection.h>
 
 extern "C" {
 #include <lwip/sockets.h>
@@ -20,21 +20,10 @@ extern "C" {
 #include "mqtt_entity.h"
 
 
-#define STEER_CHANNEL "6"
-#define BRAKE_LEFT_FRONT_CHANNEL "1"
-#define BRAKE_RIGHT_FRONT_CHANNEL "2"
-#define BRAKE_REAR_CHANNEL "0"
-
-enum IDs {
-    STEER = 0, // [-1;1]
-    BRAKE = 1, // [0;1]
-    ACCEL = 2  // [0,1]
-};
-
-using namespace Genode;
-
 int main(void)
 {
+    using namespace Genode;
+
     Timer::Connection timer;
 
     /*
@@ -88,60 +77,36 @@ int main(void)
     mosquitto.attribute("port").value(port, sizeof(port));
 
     PDBG("Connecting to MQTT server");
-    Mqtt_Entity *mqtt_entity = new Mqtt_Entity("panda", "car-servo", ip_addr);
-    mqtt_entity->my_subscribe("car-control");
+    Mqtt_Entity *mqtt_entity = new Mqtt_Entity("rpi", "car-status", ip_addr);
+    mqtt_entity->my_subscribe("car-servo");
 
     /*
-     * Controller connection
+     * Servo connection
      */
     char recv_cmd[50];
-    char servo_cmd[10];
-
-    char *split, *id, *target;
-    double value;
-    int servoVal;
+    char *split, *channel, *target;
 
     PDBG("Before Controller");
-    Controller::Connection controller;
+    static Servo::Connection servo;
     PDBG("After Controller");
+
     while (true) {
         sem_wait(&mqtt_entity->msgSem);
         mqtt_entity->get_cmd(recv_cmd, sizeof(recv_cmd));
 
-        split = strtok(recv_cmd, ",");
+        // Send to servo
+        split = strtok(cmd, ",");
         if (!split) {
             continue;
         }
-        id = split;
+        channel = split;
 
         target = strtok(NULL, ",");
         if (!target) {
             continue;
         }
-        value = atof(target);
 
-        switch (strtoul(id, NULL, 0)) {
-            case STEER :
-                servoVal = controller.transform_steer(value);
-                snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", STEER_CHANNEL, servoVal);
-                mqtt_entity->send_message(servo_cmd);
-                break;
-            case BRAKE :
-                servoVal = controller.transform_brake(value);
-                snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_LEFT_FRONT_CHANNEL, servoVal);
-                mqtt_entity->send_message(servo_cmd);
-                snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_RIGHT_FRONT_CHANNEL, servoVal);
-                mqtt_entity->send_message(servo_cmd);
-                snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_REAR_CHANNEL, servoVal);
-                mqtt_entity->send_message(servo_cmd);
-                break;
-            case ACCEL :
-                //servoVal = controller->transform_accel(value);
-                break;
-            default :
-                servoVal = -1;
-                break;
-        }
+        servo.setTarget(strtoul(channel, NULL, 0), strtoul(target, NULL, 0));
     }
 
     sleep_forever();
