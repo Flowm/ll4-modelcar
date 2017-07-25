@@ -21,8 +21,6 @@ namespace Servo {
 
             int setTarget(unsigned char channel, unsigned short target) {
 
-                PDBG("inside setTarget()");
-
                 if (channel > 11) {
                     PERR("Channel does not exist");
                     return -1;
@@ -74,27 +72,6 @@ namespace Servo {
                 return 0;
             }
 
-            int setPosition(unsigned char channel) {
-                if (channel > 11) {
-                    PERR("Channel does not exist");
-                    return -1;
-                }
-
-                unsigned char command[] = {0x90, channel};
-                if(_terminal->write(command, sizeof(command)) < sizeof(command)) {
-                    PERR("error writing");
-                    return -1;
-                }
-
-                unsigned char response[2];
-                if(_terminal->read(response,2) != 2) {
-                    PERR("error reading");
-                    return -1;
-                }
-
-                return response[0] + 256*response[1];
-            }
-
             int getPosition(unsigned char channel) {
                 if (channel > 11) {
                     PERR("Channel does not exist");
@@ -134,8 +111,6 @@ namespace Servo {
 
     };
 
-
-
     class Servo_root : public Genode::Root_component<Servo_component>
     {
         private:
@@ -167,7 +142,6 @@ int main(void) {
 
     PDBG("in main before terminal");
 
-
     /*
      * Open Terminal session
      */
@@ -182,16 +156,13 @@ int main(void) {
     enum { STACK_SIZE = 4096 };
     static Rpc_entrypoint ep(&cap, STACK_SIZE, "Servo_ep");
 
-    PDBG("in main after rpc entrypoint");
-
     static Servo_root servo_root(&ep, env()->heap(), &terminal);
-
-    PDBG("in main after rpc Servo_root");
 
     /*
      * Announce services
      */
     env()->parent()->announce(ep.manage(&servo_root));
+    PDBG("Servo_root initialized");
 
     /*
      * We are done with this and only act upon client requests now.
