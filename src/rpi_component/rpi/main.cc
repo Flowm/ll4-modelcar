@@ -87,7 +87,7 @@ int main(void)
     char recv_cmd[50];
     char *split, *channel, *target;
     while (true) {
-        sem_wait(&mqtt_entity->msgSem);
+        mqtt_entity->wait_msg();
         mqtt_entity->get_cmd(recv_cmd, sizeof(recv_cmd));
 
         split = strtok(recv_cmd, ",");

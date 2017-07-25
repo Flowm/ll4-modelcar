@@ -102,7 +102,7 @@ int main(void)
     double value;
     int servoVal;
     while (true) {
-        sem_wait(&mqtt_entity->msgSem);
+        mqtt_entity->wait_msg();
         mqtt_entity->get_cmd(recv_cmd, sizeof(recv_cmd));
 
         split = strtok(recv_cmd, ",");
