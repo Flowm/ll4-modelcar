@@ -17,6 +17,8 @@ namespace Servo {
             Terminal::Connection* _terminal;
 
         public:
+            Servo_component(Terminal::Connection *terminal) : _terminal(terminal) {}
+
             int setTarget(unsigned char channel, unsigned short target) {
 
                 PDBG("inside setTarget()");
@@ -126,7 +128,7 @@ namespace Servo {
         protected:
             Servo_component *_create_session(const char *args) {
                 PDBG("Creating Servo session.");
-                return new (md_alloc()) Servo_component();
+                return new (md_alloc()) Servo_component(_terminal);
             }
 
         public:
