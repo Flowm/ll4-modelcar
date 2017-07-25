@@ -95,7 +95,7 @@ int main(void)
         mqtt_entity->get_cmd(recv_cmd, sizeof(recv_cmd));
 
         // Send to servo
-        split = strtok(cmd, ",");
+        split = strtok(recv_cmd, ",");
         if (!split) {
             continue;
         }

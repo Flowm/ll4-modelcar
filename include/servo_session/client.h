@@ -37,7 +37,7 @@ namespace Servo {
          * @return  returns -1 if error ocured else 0
          */
         int setAcceleration(unsigned char channel, unsigned short acc){
-            return call<Rpc_setAccleration>(channel, acc);
+            return call<Rpc_setAcceleration>(channel, acc);
         }
 
         /**
