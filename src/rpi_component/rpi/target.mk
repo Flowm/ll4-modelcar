@@ -1,5 +1,5 @@
 TARGET = rpi
-SRC_CC = main.cc mqtt_entity.cc
+SRC_CC = main.cc ../../mqtt/mqtt_entity.cc
 
 LIBS   = base libmosquitto stdcxx lwip libc_lwip pthread
 

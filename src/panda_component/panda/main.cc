@@ -17,7 +17,7 @@ extern "C" {
 #include <lwip/genode.h>
 #include <nic/packet_allocator.h>
 
-#include "mqtt_entity.h"
+#include "../../mqtt/mqtt_entity.h"
 
 
 #define STEER_CHANNEL "6"

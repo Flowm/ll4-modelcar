@@ -15,6 +15,6 @@ cd $OS_DIR
 
 # Clone additional reposistories
 git clone https://github.com/argos-research/genode-world.git genode/repos/genode-world
-git clone git@gitlab.lrz.de:lil4/carFranzG.git genode/repos/model-car
+git clone git@gitlab.lrz.de:lil4/carFranzG.git genode/repos/car-project
 
 echo "Configuration of build dir $OS_DIR successful"
