@@ -96,8 +96,24 @@ namespace Servo {
             }
 
             int getPosition(unsigned char channel) {
-                // TODO: Not implemented yet
-                return 0;
+                if (channel > 11) {
+                    PERR("Channel does not exist");
+                    return -1;
+                }
+
+                unsigned char command[] = {0x90, channel};
+                if(_terminal->write(command, sizeof(command)) < sizeof(command)) {
+                    PERR("error writing");
+                    return -1;
+                }
+
+                unsigned char response[2];
+                if(_terminal->read(response,2) != 2) {
+                    PERR("error reading");
+                    return -1;
+                }
+
+                return response[0] + 256*response[1];
             }
 
             int getMovingState() {
@@ -150,7 +166,7 @@ int main(void) {
     using namespace Servo;
 
     PDBG("in main before terminal");
-    
+
 
     /*
      * Open Terminal session
