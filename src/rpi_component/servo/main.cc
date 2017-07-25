@@ -18,6 +18,9 @@ namespace Servo {
 
         public:
             int setTarget(unsigned char channel, unsigned short target) {
+
+                PDBG("inside setTarget()");
+
                 if (channel > 11) {
                     PERR("Channel does not exist");
                     return -1;
@@ -144,6 +147,9 @@ int main(void) {
     using namespace Genode;
     using namespace Servo;
 
+    PDBG("in main before terminal");
+    
+
     /*
      * Open Terminal session
      */
@@ -160,14 +166,14 @@ int main(void) {
 
     PDBG("in main after rpc entrypoint");
 
-    static Servo_root Servo_root(&ep, env()->heap(), &terminal);
+    static Servo_root servo_root(&ep, env()->heap(), &terminal);
 
     PDBG("in main after rpc Servo_root");
 
     /*
      * Announce services
      */
-    env()->parent()->announce(ep.manage(&Servo_root));
+    env()->parent()->announce(ep.manage(&servo_root));
 
     /*
      * We are done with this and only act upon client requests now.

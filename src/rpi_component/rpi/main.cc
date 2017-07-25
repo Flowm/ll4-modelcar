@@ -94,6 +94,8 @@ int main(void)
         sem_wait(&mqtt_entity->msgSem);
         mqtt_entity->get_cmd(recv_cmd, sizeof(recv_cmd));
 
+        PDBG("Got message");
+
         // Send to servo
         split = strtok(recv_cmd, ",");
         if (!split) {
@@ -107,6 +109,7 @@ int main(void)
         }
 
         servo.setTarget(strtoul(channel, NULL, 0), strtoul(target, NULL, 0));
+        PDBG("target set");
     }
 
     sleep_forever();
