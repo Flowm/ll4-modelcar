@@ -24,6 +24,9 @@ namespace Controller {
                     return -1;
                 }
 
+                // Invert value as SpeedDreams thinks -1 is right
+                value = -value;
+
                 value = (value + 1)/2;
                 return (SERVO_UPPER_BOUND - SERVO_LOWER_BOUND) * value + SERVO_LOWER_BOUND;
             }
