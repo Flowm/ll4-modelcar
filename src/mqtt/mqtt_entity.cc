@@ -7,19 +7,18 @@
 Mqtt_Entity::Mqtt_Entity(const char* id, const char *topic, const char* host)
     : mosqpp::mosquittopp(id), topic(topic) {
 
-        this->keepalive = 60;
-        this->host = host;
-        this->port = 1883;
-
         sem_init(&msgSem, 0, 0);
 
+        // init mosquitto, set params and start loop
         mosqpp::lib_init();
-        connect(host, port, keepalive);
+        connect(host, 1883, 60);
         loop_start();
     }
 
 Mqtt_Entity::~Mqtt_Entity() {
     while (want_write()) {}
+
+    // clean up mosquitto
     disconnect();
     loop_stop();
     mosqpp::lib_cleanup();
