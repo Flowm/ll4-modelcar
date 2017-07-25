@@ -8,18 +8,17 @@
 #include <timer_session/connection.h>
 #include <base/rpc_server.h>
 
-#include <controller_session/client.h>
-#include <controller_session/connection.h>
-
 extern "C" {
 #include <lwip/sockets.h>
 }
 #include <lwip/genode.h>
 #include <nic/packet_allocator.h>
 
+#include <controller_session/client.h>
+#include <controller_session/connection.h>
 #include "../../mqtt/mqtt_entity.h"
 
-
+// Servo channel configuration
 #define STEER_CHANNEL "6"
 #define BRAKE_LEFT_FRONT_CHANNEL "1"
 #define BRAKE_RIGHT_FRONT_CHANNEL "2"
@@ -31,11 +30,10 @@ enum IDs {
     ACCEL = 2  // [0,1]
 };
 
-using namespace Genode;
 
 int main(void)
 {
-    Timer::Connection timer;
+    using namespace Genode;
 
     /*
      * Network configuration
@@ -52,9 +50,8 @@ int main(void)
             PERR("lwip init failed!");
             return 1;
         }
-        PDBG("done");
     } else {
-        PDBG("manual network...");
+        PDBG("Manual network...");
         char ip_addr[16] = {0};
         char subnet[16] = {0};
         char gateway[16] = {0};
@@ -71,10 +68,9 @@ int main(void)
             PERR("lwip init failed!");
             return 1;
         }
-        PDBG("done");
     }
-
-    // Wait for IP address
+    PDBG("Network configuration done, waiting for IP");
+    Timer::Connection timer;
     timer.msleep(10000);
 
     /*
@@ -94,16 +90,17 @@ int main(void)
     /*
      * Controller connection
      */
+    PDBG("Controller init");
+    Controller::Connection controller;
+
+    /*
+     * Handle mqtt messages
+     */
     char recv_cmd[50];
     char servo_cmd[10];
-
     char *split, *id, *target;
     double value;
     int servoVal;
-
-    PDBG("Before Controller");
-    Controller::Connection controller;
-    PDBG("After Controller");
     while (true) {
         sem_wait(&mqtt_entity->msgSem);
         mqtt_entity->get_cmd(recv_cmd, sizeof(recv_cmd));
@@ -121,12 +118,12 @@ int main(void)
         value = atof(target);
 
         switch (strtoul(id, NULL, 0)) {
-            case STEER :
+            case STEER:
                 servoVal = controller.transform_steer(value);
                 snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", STEER_CHANNEL, servoVal);
                 mqtt_entity->send_message(servo_cmd);
                 break;
-            case BRAKE :
+            case BRAKE:
                 servoVal = controller.transform_brake(value);
                 snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_LEFT_FRONT_CHANNEL, servoVal);
                 mqtt_entity->send_message(servo_cmd);
@@ -135,10 +132,10 @@ int main(void)
                 snprintf(servo_cmd, sizeof(servo_cmd), "%s,%d", BRAKE_REAR_CHANNEL, servoVal);
                 mqtt_entity->send_message(servo_cmd);
                 break;
-            case ACCEL :
+            case ACCEL:
                 //servoVal = controller->transform_accel(value);
                 break;
-            default :
+            default:
                 servoVal = -1;
                 break;
         }

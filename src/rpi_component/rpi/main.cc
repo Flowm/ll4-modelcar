@@ -8,23 +8,20 @@
 #include <timer_session/connection.h>
 #include <base/rpc_server.h>
 
-#include <servo_session/client.h>
-#include <servo_session/connection.h>
-
 extern "C" {
 #include <lwip/sockets.h>
 }
 #include <lwip/genode.h>
 #include <nic/packet_allocator.h>
 
+#include <servo_session/client.h>
+#include <servo_session/connection.h>
 #include "../../mqtt/mqtt_entity.h"
 
 
 int main(void)
 {
     using namespace Genode;
-
-    Timer::Connection timer;
 
     /*
      * Network configuration
@@ -41,9 +38,8 @@ int main(void)
             PERR("lwip init failed!");
             return 1;
         }
-        PDBG("done");
     } else {
-        PDBG("manual network...");
+        PDBG("Manual network...");
         char ip_addr[16] = {0};
         char subnet[16] = {0};
         char gateway[16] = {0};
@@ -60,10 +56,9 @@ int main(void)
             PERR("lwip init failed!");
             return 1;
         }
-        PDBG("done");
     }
-
-    // Wait for IP address
+    PDBG("Network configuration done, waiting for IP");
+    Timer::Connection timer;
     timer.msleep(10000);
 
     /*
@@ -83,20 +78,18 @@ int main(void)
     /*
      * Servo connection
      */
+    PDBG("Servo init");
+    static Servo::Connection servo;
+
+    /*
+     * Handle mqtt messages
+     */
     char recv_cmd[50];
     char *split, *channel, *target;
-
-    PDBG("Before Controller");
-    static Servo::Connection servo;
-    PDBG("After Controller");
-
     while (true) {
         sem_wait(&mqtt_entity->msgSem);
         mqtt_entity->get_cmd(recv_cmd, sizeof(recv_cmd));
 
-        PDBG("Got message");
-
-        // Send to servo
         split = strtok(recv_cmd, ",");
         if (!split) {
             continue;
@@ -109,7 +102,6 @@ int main(void)
         }
 
         servo.setTarget(strtoul(channel, NULL, 0), strtoul(target, NULL, 0));
-        PDBG("target set");
     }
 
     sleep_forever();
