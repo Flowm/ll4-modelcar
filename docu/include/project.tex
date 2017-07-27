@@ -2,6 +2,16 @@
 
 
 \section{Source Code Structure}
+\paragraph{old}
+In the old folder source code for linux and scripts for working with the pololu maestro servo controller board can be found, which were used during development.
 
+\paragraph{run}
+In the run folder the run files for the ecu(car\_panda) and the servo controller(car\_rpi) are placed.
+
+\paragraph{include}
+In the include directory the header files for the servo and the controller component are split up into their respective folders.
+
+\paragraph{src}
+In the source(src) directory all source files used can be found. In the subdirectory mqtt is a class that implements the mosquitto interface, which is used in the panda and the rpi targets. Each of the two targets is further split up into its main component and a secondary component including each a target.mk for the build process and the actual \CC-source file.
 
 \section{Application Programming Interfaces}
