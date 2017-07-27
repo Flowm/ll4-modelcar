@@ -1,25 +1,4 @@
 \section{Project Setup}
-The following components were present in the lab:
-
-\begin{itemize}
-    \item Model Car: The model car has three servos for the brakes, one servo for steering and an engine for acceleration. All of these components are controlled via a servo controller board.
-    
-    \item Servo Controller Board: The servo controller board is a \textit{polulu maestro servo controller board} which is attached to a Raspberry Pi via a usb-to-uart bridge.
-
-    \item Raspberry Pi: The Raspberry Pi is responsible for sending control commands to the servo controller board. It receives its input data from a PandaBoard via a mqtt topic to which it is subscribed. The Raspberry Pi runs Genode with FiascoOC.
-
-    \item PandaBoard: Besides the Raspberry Pi, the PandaBoard is the second ECU in the model car. It also runs Genode with FiascoOC. The task is to receive data from a simulation, transform the data into concrete servo values and send them via mqtt to the Raspberry Pi.
-\end{itemize}
-
-An image of the model car is shown in figure \ref{fig:model}.
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.70\linewidth]{images/model}
-    \caption{Model Car}
-    \label{fig:model}
-\end{figure}
-
 
 \section{Source Code Structure}
 \paragraph{old}
@@ -69,3 +48,20 @@ Channel is a number ranging from 0 to 11 and describes the channel number on the
 \textbf{Example:} (0,7500) \\
 This command sends a pwm signal with value 7000 to channel 0. This means that the brake connected to channel 0 gets activated with full force. 
 
+\subsection{components interface}
+\paragraph{servo component}
+The servo component provides five methods. All methods return -1 if an error occurred and else 0 or the requested value.
+\begin{itemize}
+\item The function \textbf{setTarget} receives a channel, where the servo is connected and the target position.
+\item The function \textbf{setSpeed} receives a channel, where the servo is connected and the maximum speed of the servo, where 0 means unlimited.
+\item The function \textbf{setAcceleration} receives a channel, where the servo is connected and the maximum acceleration of the servo, where 0 means unlimited.
+\item The function \textbf{getPosition} receives a channel, where the servo is connected and returns its current position.
+\item The function \textbf{getMovingState} returns 0 if no servo is moving else 1.
+\end{itemize}
+
+\paragraph{controller component}
+The controller component provides two methods each expecting a double as input and returning an integer value.
+\begin{itemize}
+\item The function \textbf{transform\_steer} transforms a steering angle between -1 and 1, where -1 is completely right, and returns the corresponding pwm value in quarter microseconds for the servo.
+\item The function \textbf{transform\_brake} transforms a braking value between 0 and 1, where 1 means fully applied, and returns the corresponding pwm value in quarter microseconds for the servo.
+\end{itemize}
