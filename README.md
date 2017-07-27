@@ -4,8 +4,7 @@ Actuaction of a model car based on simulation data from SpeedDreams.
 All components in the model car (Pandaboard, RaspberryPI) are running Genode with Fiasco.OC.
 
 # Architecture
-Control data is received on a MQTT topic, processed on the ECU (pandaboard) and then passed to the servo controller (Raspberry PI).
-
+Control data is received on a MQTT topic, processed on the ECU (pandaboard) and then passed via MQTT to the high level servo controller (Raspberry PI). It comunicates with the low level servo controller(pololu maestro) over a serial port which then controles the servos with a pwm signal.
 
 # Install
 Execute setup.sh
