@@ -21,7 +21,6 @@ An image of the model car is shown in figure \ref{fig:model}.
 \end{figure}
 
 
-
 \section{Source Code Structure}
 \paragraph{old}
 In the old folder source code for linux and scripts for working with the pololu maestro servo controller board can be found, which were used during development.
@@ -36,4 +35,37 @@ In the include directory the header files for the servo and the controller compo
 In the source(src) directory all source files used can be found. In the subdirectory mqtt is a class that implements the mosquitto interface, which is used in the panda and the rpi targets. Each of the two targets is further split up into its main component and a secondary component including each a target.mk for the build process and the actual \CC-source file.
 
 \section{Application Programming Interfaces}
+\subsection{Mqtt component}
+We use mqtt for both, the communication between the simulation and the PandaBoard and the communication between the PandaBoard and the Raspberry Pi.
+
+\paragraph{car-control}
+This is the topic name of the mqtt topic to which the PandaBoard is subscribed to. Commands to this topic are sent from the simulation. All commands need to have the following format: \\
+
+\textbf{Format:} (command,value) \\
+Command describes the type of request, i.e. braking, steering or acceleration. Value describes the strength of the command. All possible commands and values are listed in table \ref{tab:car-control}. \\
+
+\textbf{Example:} (1,0.5) \\
+This is a brake request with half braking force \\
+
+\begin{figure}[h]
+    \centering
+    \begin{tabular}{c | c | c}
+        \textbf{Command} & \textbf{Value Range} & \textbf{Meaning} \\ \hline
+        0   &   [ -1.0 ; 1.0 ]    & Steering \\
+        1   &   [ 0 ; 1.0 ]       & Brake \\ 
+        2   &   [ 0 ; 1.0 ]       & Acceleration \\ 
+    \end{tabular}
+    \caption{Allowed values for the car-control topic}
+    \label{tab:car-control}
+\end{figure}
+
+
+\paragraph{car-servo}
+This is the topic name of the mqtt topic to which the Raspberry Pi is subscribed to. Commands to this topic are sent from the PandaBoard. All commands need to have the following format: \\ 
+
+\textbf{Format:} (channel,value) \\
+Channel is a number ranging from 0 to 11 and describes the channel number on the servo controller board. The braking servos are connected to channels 0, 1 and 2, whereas the steering servo is connected to channel 6. With the polulu maestro servo controller board it is not possible to control the engine. Values are pwm signals ranging from 4500 to 7500. The neutral value for the servo is 6000. \\
+
+\textbf{Example:} (0,7500) \\
+This command sends a pwm signal with value 7000 to channel 0. This means that the brake connected to channel 0 gets activated with full force. 
 
