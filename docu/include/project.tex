@@ -24,25 +24,30 @@ An image of the model car is shown in figure \ref{fig:model}. The servos can be 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Source Code Structure}
+The complete structure of the project directory can be seen in figure \ref{fig:structure}. All of the subdirectories are described in more detail in the following. \\
 
-\dirtree{%
-.1 car\_project.
-.2 run.
-.2 include.
-.3 controller\_session.
-.3 servo\_session.
-.2 src.
-.3 mqtt.
-.3 rpi\_component.
-.4 rpi.
-.4 servo.
-.3 panda\_component.
-.4 panda.
-.4 controller.
-.2 old.
-.3 linux.
-.3 pololu.
-}
+\begin{figure}[h]
+    \dirtree{%
+    .1 car\_project.
+    .2 run.
+    .2 include.
+    .3 controller\_session.
+    .3 servo\_session.
+    .2 src.
+    .3 mqtt.
+    .3 rpi\_component.
+    .4 rpi.
+    .4 servo.
+    .3 panda\_component.
+    .4 panda.
+    .4 controller.
+    .2 old.
+    .3 linux.
+    .3 pololu.
+    }
+    \caption{Structure of the project directory}
+    \label{fig:structure}
+\end{figure}
 
 
 \paragraph{run}
@@ -110,7 +115,7 @@ Command describes the type of request, i.e. braking, steering or acceleration. V
 \textbf{Example:} (1,0.5) \\
 This is a brake request with half braking force \\
 
-\begin{figure}[h]
+\begin{table}[h]
     \centering
     \begin{tabular}{c | c | c}
         \textbf{Command} & \textbf{Value Range} & \textbf{Meaning} \\ \hline
@@ -120,7 +125,7 @@ This is a brake request with half braking force \\
     \end{tabular}
     \caption{Allowed values for the car-control topic}
     \label{tab:car-control}
-\end{figure}
+\end{table}
 
 
 \subsubsection{car-servo}
