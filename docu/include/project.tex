@@ -33,12 +33,12 @@ An image of the model car is shown in figure \ref{fig:model}. The servos can be 
 .3 servo\_session.
 .2 src.
 .3 mqtt.
-.3 panda\_component.
-.4 panda.
-.4 controller.
 .3 rpi\_component.
 .4 rpi.
 .4 servo.
+.3 panda\_component.
+.4 panda.
+.4 controller.
 .2 old.
 .3 linux.
 .3 pololu.
@@ -52,24 +52,39 @@ These are responsible for defining the project build components and the boot mod
 \paragraph{include}
 In the include directory the header files for the servo and the controller component are split up into their respective folders.
 
-\paragraph{controller\_session}
+\paragraph{include/controller\_session}
 Contains the interface for the \texttt{controller\_session} component described in section~\ref{sec:comp-controller}.
 
-\paragraph{servo\_session}
+\paragraph{include/servo\_session}
 Contains the interface for the \texttt{servo\_session} component described in section~\ref{sec:comp-servo}.
 
 \paragraph{src}
 In the source (\texttt{src}) directory all source files used can be found.
 Each of the two targets is further split up into its main component and a secondary component including each a target.mk for the build process and the actual \CC-source file.
 
-\paragraph{mqtt}
+\paragraph{src/mqtt}
 In the subdirectory mqtt is a class that implements the mosquitto interface, which is used in the panda and the rpi targets.
 
-\paragraph{panda\_component}
+\paragraph{src/rpi\_component}
+
+\paragraph{src/rpi\_component/rpi}
+
+\paragraph{src/rpi\_component/servo}
+
+\paragraph{src/panda\_component}
+
+\paragraph{src/panda\_component/panda}
+
+\paragraph{src/panda\_component/controller}
 
 
 \paragraph{old}
 In the old folder source code for linux and scripts for working with the pololu maestro servo controller board can be found, which were used during development.
+
+\paragraph{old/linux}
+
+\paragraph{old/pololu}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Application Programming Interfaces}
@@ -104,7 +119,7 @@ This is a brake request with half braking force \\
 This is the topic name of the mqtt topic to which the Raspberry Pi is subscribed to. Commands to this topic are sent from the PandaBoard. All commands need to have the following format: \\ 
 
 \textbf{Format:} (channel,value) \\
-Channel is a number ranging from 0 to 11 and describes the channel number on the servo controller board. The braking servos are connected to channels 0, 1 and 2, whereas the steering servo is connected to channel 6. With the polulu maestro servo controller board it is not possible to control the engine. Values are pwm signals ranging from 4500 to 7500. The neutral value for the servo is 6000. \\
+Channel is a number ranging from 0 to 11 and describes the channel number on the servo controller board. The braking servos are connected to channels 0, 1 and 2, whereas the steering servo is connected to channel 6. With the pololu maestro servo controller board it is not possible to control the engine. Values are pwm signals ranging from 4500 to 7500. The neutral value for the servo is 6000. \\
 
 \textbf{Example:} (0,7500) \\
 This command sends a pwm signal with value 7000 to channel 0. This means that the brake connected to channel 0 gets activated with full force. 
