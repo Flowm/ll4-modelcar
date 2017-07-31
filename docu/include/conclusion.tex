@@ -1,1 +1,7 @@
-\section{Conclusion}
+\section{Future Work}
+As always there are several possibilities for further improvement of the project.
+The most obvious one for an external person is to add control over the main engine of the car.
+From a technical perspective, adding sensors to the car for a loop closure would make a real HIL test-bed possible.
+This especially in combination with a more advanced control, e.g. ABS, implemented on the panda board, would improve the hole setup.
+Furthermore it would enhance the project architecture to export the mqtt class into its own component, which could also setup the the network.
+Moreover the mqtt communication could be redesigned so that there is a topic for each possible command, such that every message only consists of a single value. 
