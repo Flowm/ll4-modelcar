@@ -46,7 +46,8 @@ An image of the model car is shown in figure \ref{fig:model}. The servos can be 
 
 
 \paragraph{run}
-In the run folder the run files for the ecu(car\_panda) and the servo controller(car\_rpi) are placed.
+In the run folder the run files for the ecu (car\_panda) and the servo controller (car\_rpi) are placed.
+These are responsible for defining the project build components and the boot modules. Additionally, they contain the configuration for the started modules.
 
 \paragraph{include}
 In the include directory the header files for the servo and the controller component are split up into their respective folders.
@@ -61,7 +62,7 @@ In the old folder source code for linux and scripts for working with the pololu 
 \subsection{Mqtt component}
 We use mqtt for both, the communication between the simulation and the PandaBoard and the communication between the PandaBoard and the Raspberry Pi.
 
-\paragraph{car-control}
+\subsubsection{car-control}
 This is the topic name of the mqtt topic to which the PandaBoard is subscribed to. Commands to this topic are sent from the simulation. All commands need to have the following format: \\
 
 \textbf{Format:} (command,value) \\
@@ -83,7 +84,7 @@ This is a brake request with half braking force \\
 \end{figure}
 
 
-\paragraph{car-servo}
+\subsubsection{car-servo}
 This is the topic name of the mqtt topic to which the Raspberry Pi is subscribed to. Commands to this topic are sent from the PandaBoard. All commands need to have the following format: \\ 
 
 \textbf{Format:} (channel,value) \\
@@ -93,7 +94,7 @@ Channel is a number ranging from 0 to 11 and describes the channel number on the
 This command sends a pwm signal with value 7000 to channel 0. This means that the brake connected to channel 0 gets activated with full force. 
 
 \subsection{Components interface}
-\paragraph{Servo component}
+\subsubsection{Servo component}
 The servo component provides five methods. All methods return -1 if an error occurred and else 0 or the requested value.
 \begin{itemize}
 \item The function \textbf{setTarget} receives a channel, where the servo is connected and the target position.
@@ -112,7 +113,7 @@ GENODE_RPC(Rpc_getPosition, int, getPosition, unsigned char);
 GENODE_RPC(Rpc_getMovingState, int, getMovingState);
 \end{lstlisting}
 
-\paragraph{Controller component}
+\subsubsection{Controller component}
 The controller component provides two methods each expecting a double as input and returning an integer value.
 \begin{itemize}
 \item The function \textbf{transform\_steer} transforms a steering angle between -1 and 1, where -1 is completely right, and returns the corresponding pwm value in quarter microseconds for the servo.
