@@ -93,7 +93,7 @@ These were used for development during the first phase of the project when the r
 \paragraph{old/pololu}
 In the subdirectory pololu resides a shell script and a c program, which are originally from the pololu homepage and can be used for hardware testing.
 
-
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Application Programming Interfaces}
 
@@ -132,6 +132,7 @@ Channel is a number ranging from 0 to 11 and describes the channel number on the
 \textbf{Example:} (0,7500) \\
 This command sends a pwm signal with value 7000 to channel 0. This means that the brake connected to channel 0 gets activated with full force. 
 
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Components interface}
 \label{sec:comp}
@@ -141,6 +142,7 @@ This command sends a pwm signal with value 7000 to channel 0. This means that th
 \label{sec:comp-servo}
 
 The servo component provides five methods. All methods return -1 if an error occurred and else 0 or the requested value.
+\autoref{lst:servo} shows the corresponding function declarations exported to genode.
 \begin{itemize}
 \item The function \textbf{setTarget} receives a channel, where the servo is connected and the target position.
 \item The function \textbf{setSpeed} receives a channel, where the servo is connected and the maximum speed of the servo, where 0 means unlimited.
@@ -149,7 +151,7 @@ The servo component provides five methods. All methods return -1 if an error occ
 \item The function \textbf{getMovingState} returns 0 if no servo is moving else 1.
 \end{itemize}
 
-\begin{lstlisting}[language=c, frame=single, basicstyle=\footnotesize, caption=Genode interface for servo component]
+\begin{lstlisting}[language=c, frame=single, basicstyle=\footnotesize,  label={lst:servo}, caption=Genode interface for servo component]
 GENODE_RPC(Rpc_setTarget, int, setTarget, unsigned char, unsigned short);
 GENODE_RPC(Rpc_setSpeed, int, setSpeed, unsigned char, unsigned short);
 GENODE_RPC(Rpc_setAcceleration, int, setAcceleration, unsigned char, 
@@ -162,12 +164,13 @@ GENODE_RPC(Rpc_getMovingState, int, getMovingState);
 \label{sec:comp-controller}
 
 The controller component provides two methods each expecting a double as input and returning an integer value.
+\autoref{lst:servo} shows the corresponding function declarations exported to genode.
 \begin{itemize}
 \item The function \textbf{transform\_steer} transforms a steering angle between -1 and 1, where -1 is completely right, and returns the corresponding pwm value in quarter microseconds for the servo.
 \item The function \textbf{transform\_brake} transforms a braking value between 0 and 1, where 1 means fully applied, and returns the corresponding pwm value in quarter microseconds for the servo.
 \end{itemize}
 
-\begin{lstlisting}[language=c, frame=single, basicstyle=\footnotesize, caption=Genode interface for controller component]
+\begin{lstlisting}[language=c, frame=single, basicstyle=\footnotesize,  label={lst:controller}, caption=Genode interface for controller component]
 GENODE_RPC(Rpc_transform_steer, int, transform_steer, double);
 GENODE_RPC(Rpc_transform_brake, int, transform_brake, double);
 \end{lstlisting}
