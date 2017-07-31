@@ -64,25 +64,17 @@ int main(void) {
     using namespace Genode;
     using namespace Controller;
     
-    PDBG("in main before cap");
-
     /*
      * Get a session for the parent's capability service, so that we
      * are able to create capabilities.
      */
     Cap_connection cap;
     
-    PDBG("in main after cap");
-
     enum { STACK_SIZE = 4096 };
     static Rpc_entrypoint ep(&cap, STACK_SIZE, "controller_ep");
     
-    PDBG("in main after rpc entrypoint");
-
     static Controller_root controller_root(&ep, env()->heap());
 
-    PDBG("in main after rpc controller_root");
-    
     /*
      * Announce services
      */

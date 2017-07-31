@@ -133,7 +133,7 @@ int main(void)
                 mqtt_entity->send_message(servo_cmd);
                 break;
             case ACCEL:
-                //servoVal = controller->transform_accel(value);
+                // currently not implemented
                 break;
             default:
                 servoVal = -1;

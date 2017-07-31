@@ -140,8 +140,6 @@ int main(void) {
     using namespace Genode;
     using namespace Servo;
 
-    PDBG("in main before terminal");
-
     /*
      * Open Terminal session
      */
@@ -162,7 +160,6 @@ int main(void) {
      * Announce services
      */
     env()->parent()->announce(ep.manage(&servo_root));
-    PDBG("Servo_root initialized");
 
     /*
      * We are done with this and only act upon client requests now.
