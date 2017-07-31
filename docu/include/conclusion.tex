@@ -1,11 +1,9 @@
 \section{Summary and Future Work}
 As mentioned in section \ref{sec:intro} the overall goal of this project is to set up a HIL scenario. Since there are no physical sensors on the model car, it is currently not possible to measure and send any of these values. Therefore, the loop is not closed at the moment. \\
 
-Apart from that, it is only possible to control the braking and the steering servos. That is because the main engine can not be controlled via the \textit{pololu maestro} servo controller board, but requires an own controller with more power. A further technical problem resulting from this is the need of a second Raspberry Pi, since Genode is currently not able to handle more than one serial connection simultaneously. \\
+Apart from that, it is only possible to control the braking and the steering servos. That is because the main engine can not be controlled via the \textit{pololu maestro} servo controller board, but requires an own controller with more power. A further technical problem resulting from this is the need of a second Raspberry Pi, since Genode is currently not able to handle more than one serial connection simultaneously. In the future a second Raspberry Pi could be used for controlling the main engine. \\
 
 As always there are several possibilities for further improvement of the project. The most obvious one is to add sensors to the car in order to close the loop for a real HIL test-bed. Especially in combination with a more advanced control, e.g. ABS, implemented on the PandaBoard, this would improve the whole setup. \\
-
-Apart from that a second Raspberry Pi could be implemented which is responsible for controlling the main engine. \\
 
 Furthermore, the project architecture could be enhanced by exporting the mqtt class into its own component. As a result of this the main component of the Raspberry Pi and the PandaBoard, respectively, could be simplified since it would no longer be required to setup the network in these components. \\
 
