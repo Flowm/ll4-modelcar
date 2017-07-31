@@ -75,10 +75,13 @@ The rpi program is responsible for handling the commands received from the mqtt 
 The servo program controls the servos by sending commands over the serial connection which connects the Raspberry Pi and the pololu servo controller board.
 
 \paragraph{src/panda\_component}
+The \texttt{panda\_component} contains the programs that run on the Panda Board described by the \texttt{car\_panda.run} runfile.
 
 \paragraph{src/panda\_component/panda}
+The panda program sets up the network and uses the mqtt class to connect to the mqtt server during initialization. Afterwards it passes on the car-control topic received commands to the controller component and publishes the result on the car-servo topic.
 
 \paragraph{src/panda\_component/controller}
+The controller component transforms abstract commands from the simulation to pwm values.
 
 \paragraph{old}
 The old folder contains programs and scripts used for development.
@@ -88,6 +91,7 @@ An implementation of the rpi and panda components as linux user programs can be 
 These were used for development during the first phase of the project when the rpi genode image was available yet.
 
 \paragraph{old/pololu}
+In the subdirectory pololu resides a shell script and a c program, which are originally from the pololu homepage and can be used for hardware testing.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
