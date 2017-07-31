@@ -15,15 +15,35 @@ An image of the model car is shown in figure \ref{fig:model}.
 
 \begin{figure}[h]
        \centering
-       \includegraphics[width=0.70\linewidth]{images/model}
+       \includegraphics[width=1.0\linewidth]{images/model}
        \caption{Model Car}
        \label{fig:model}
 \end{figure}
 
+\newpage
 
 \section{Source Code Structure}
-\paragraph{old}
-In the old folder source code for linux and scripts for working with the pololu maestro servo controller board can be found, which were used during development.
+
+\dirtree{%
+.1 car\_project.
+.2 run.
+.2 include.
+.3 controller\_session.
+.3 servo\_session.
+.2 src.
+.3 mqtt.
+.3 panda\_component.
+.4 panda.
+.4 controller.
+.3 rpi\_component.
+.4 rpi.
+.4 servo.
+.2 old.
+.3 linux.
+.3 pololu.
+}
+
+
 
 \paragraph{run}
 In the run folder the run files for the ecu(car\_panda) and the servo controller(car\_rpi) are placed.
@@ -33,6 +53,9 @@ In the include directory the header files for the servo and the controller compo
 
 \paragraph{src}
 In the source(src) directory all source files used can be found. In the subdirectory mqtt is a class that implements the mosquitto interface, which is used in the panda and the rpi targets. Each of the two targets is further split up into its main component and a secondary component including each a target.mk for the build process and the actual \CC-source file.
+
+\paragraph{old}
+In the old folder source code for linux and scripts for working with the pololu maestro servo controller board can be found, which were used during development.
 
 \section{Application Programming Interfaces}
 \subsection{Mqtt component}
