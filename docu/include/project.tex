@@ -46,17 +46,17 @@ An image of the model car is shown in figure \ref{fig:model}. The servos can be 
 
 
 \paragraph{run}
-In the run folder the run files for the ecu (car\_panda) and the servo controller (car\_rpi) are placed.
+In the run folder the run files for the ecu (\texttt{car\_panda.run}) and the servo controller (\texttt{car\_rpi.run}) are placed.
 These are responsible for defining the project build components and the boot modules. Additionally, they contain the configuration for the started modules.
 
 \paragraph{include}
 In the include directory the header files for the servo and the controller component are split up into their respective folders.
 
-\paragraph{include/controller\_session}
-Contains the interface for the \texttt{controller\_session} component described in section~\ref{sec:comp-controller}.
-
 \paragraph{include/servo\_session}
 Contains the interface for the \texttt{servo\_session} component described in section~\ref{sec:comp-servo}.
+
+\paragraph{include/controller\_session}
+Contains the interface for the \texttt{controller\_session} component described in section~\ref{sec:comp-controller}.
 
 \paragraph{src}
 In the source (\texttt{src}) directory all source files used can be found.
@@ -66,10 +66,13 @@ Each of the two targets is further split up into its main component and a second
 In the subdirectory mqtt is a class that implements the mosquitto interface, which is used in the panda and the rpi targets.
 
 \paragraph{src/rpi\_component}
+The \texttt{rpi\_component} contains the programs that run on the Raspberry Pi described by the \texttt{car\_rpi.run} runfile.
 
 \paragraph{src/rpi\_component/rpi}
+The rpi program is responsible for handling the commands received from the mqtt server and forwarding them to the servo program
 
 \paragraph{src/rpi\_component/servo}
+The servo program controls the servos by sending commands over the serial connection which connects the Raspberry Pi and the pololu servo controller board.
 
 \paragraph{src/panda\_component}
 
@@ -77,11 +80,12 @@ In the subdirectory mqtt is a class that implements the mosquitto interface, whi
 
 \paragraph{src/panda\_component/controller}
 
-
 \paragraph{old}
-In the old folder source code for linux and scripts for working with the pololu maestro servo controller board can be found, which were used during development.
+The old folder contains programs and scripts used for development.
 
 \paragraph{old/linux}
+An implementation of the rpi and panda components as linux user programs can be found in the \texttt{linux} folder.
+These were used for development during the first phase of the project when the rpi genode image was available yet.
 
 \paragraph{old/pololu}
 
