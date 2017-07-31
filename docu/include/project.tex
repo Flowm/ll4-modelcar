@@ -22,6 +22,7 @@ An image of the model car is shown in figure \ref{fig:model}. The servos can be 
 
 \newpage
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Source Code Structure}
 
 \dirtree{%
@@ -44,7 +45,6 @@ An image of the model car is shown in figure \ref{fig:model}. The servos can be 
 }
 
 
-
 \paragraph{run}
 In the run folder the run files for the ecu (car\_panda) and the servo controller (car\_rpi) are placed.
 These are responsible for defining the project build components and the boot modules. Additionally, they contain the configuration for the started modules.
@@ -52,13 +52,29 @@ These are responsible for defining the project build components and the boot mod
 \paragraph{include}
 In the include directory the header files for the servo and the controller component are split up into their respective folders.
 
+\paragraph{controller\_session}
+Contains the interface for the \texttt{controller\_session} component described in section~\ref{sec:comp-controller}.
+
+\paragraph{servo\_session}
+Contains the interface for the \texttt{servo\_session} component described in section~\ref{sec:comp-servo}.
+
 \paragraph{src}
-In the source(src) directory all source files used can be found. In the subdirectory mqtt is a class that implements the mosquitto interface, which is used in the panda and the rpi targets. Each of the two targets is further split up into its main component and a secondary component including each a target.mk for the build process and the actual \CC-source file.
+In the source (\texttt{src}) directory all source files used can be found.
+Each of the two targets is further split up into its main component and a secondary component including each a target.mk for the build process and the actual \CC-source file.
+
+\paragraph{mqtt}
+In the subdirectory mqtt is a class that implements the mosquitto interface, which is used in the panda and the rpi targets.
+
+\paragraph{panda\_component}
+
 
 \paragraph{old}
 In the old folder source code for linux and scripts for working with the pololu maestro servo controller board can be found, which were used during development.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Application Programming Interfaces}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Mqtt component}
 We use mqtt for both, the communication between the simulation and the PandaBoard and the communication between the PandaBoard and the Raspberry Pi.
 
@@ -93,8 +109,14 @@ Channel is a number ranging from 0 to 11 and describes the channel number on the
 \textbf{Example:} (0,7500) \\
 This command sends a pwm signal with value 7000 to channel 0. This means that the brake connected to channel 0 gets activated with full force. 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Components interface}
+\label{sec:comp}
+
+
 \subsubsection{Servo component}
+\label{sec:comp-servo}
+
 The servo component provides five methods. All methods return -1 if an error occurred and else 0 or the requested value.
 \begin{itemize}
 \item The function \textbf{setTarget} receives a channel, where the servo is connected and the target position.
@@ -114,6 +136,8 @@ GENODE_RPC(Rpc_getMovingState, int, getMovingState);
 \end{lstlisting}
 
 \subsubsection{Controller component}
+\label{sec:comp-controller}
+
 The controller component provides two methods each expecting a double as input and returning an integer value.
 \begin{itemize}
 \item The function \textbf{transform\_steer} transforms a steering angle between -1 and 1, where -1 is completely right, and returns the corresponding pwm value in quarter microseconds for the servo.
