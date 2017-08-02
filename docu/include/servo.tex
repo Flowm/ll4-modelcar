@@ -28,4 +28,4 @@ Because of delays in the installation of Genode on the Raspberry Pi that is comm
 
 All functions provided by the servo class/component have a similar structure. First the input values are checked for valid range, second a command is built and sent and lastly its return value checked for errors. If the servo controller board is supposed to answer, the response is read in, checked for errors and returned. Each command is represented as a char array, where the 7 least significant bits represent one serial message. The first message is always the actual command type, the next one is the channel that is affected and lastly a value is sent often split up into two messages in little-endian format.\\
 
-In Genode the communication with the servo is a complete component which can be called via remote procedure calls(RPC). The exposed functions are documented in chapter~\ref{sec:api}.
+Only little changes were needed to port the code to Genode. Additionally the program was made a complete component, which can be called via remote procedure calls(RPC), which lead to several difficulties. The exposed functions are documented in chapter~\ref{sec:api}.

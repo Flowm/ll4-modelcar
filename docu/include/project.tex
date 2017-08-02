@@ -95,7 +95,7 @@ The old folder contains programs and scripts used for development.
 
 \paragraph{old/linux}
 An implementation of the rpi and panda components as linux user programs can be found in the \texttt{linux} folder.
-These were used for development during the first phase of the project when the rpi genode image was available yet.
+These were used for development during the first phase of the project when the rpi Genode image wasn't available yet.
 
 \paragraph{old/pololu}
 In the subdirectory pololu resides a shell script and a c program, which are originally from the pololu homepage and can be used for hardware testing.
@@ -152,7 +152,7 @@ This command sends a pwm signal with value 7000 to channel 0. This means that th
 \label{sec:comp-servo}
 
 The servo component provides five methods. All methods return -1 if an error occurred and else 0 or the requested value.
-\autoref{lst:servo} shows the corresponding function declarations exported to genode.
+\autoref{lst:servo} shows the corresponding function declarations exported to Genode.
 \begin{itemize}
 \item The function \textbf{setTarget} receives a channel, where the servo is connected and the target position.
 \item The function \textbf{setSpeed} receives a channel, where the servo is connected and the maximum speed of the servo, where 0 means unlimited.
@@ -174,7 +174,7 @@ GENODE_RPC(Rpc_getMovingState, int, getMovingState);
 \label{sec:comp-controller}
 
 The controller component provides two methods each expecting a double as input and returning an integer value.
-\autoref{lst:servo} shows the corresponding function declarations exported to genode.
+\autoref{lst:servo} shows the corresponding function declarations exported to Genode.
 \begin{itemize}
 \item The function \textbf{transform\_steer} transforms a steering angle between -1 and 1, where -1 is completely right, and returns the corresponding pwm value in quarter microseconds for the servo.
 \item The function \textbf{transform\_brake} transforms a braking value between 0 and 1, where 1 means fully applied, and returns the corresponding pwm value in quarter microseconds for the servo.
