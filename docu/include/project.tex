@@ -1,10 +1,11 @@
 \section{Project Setup}
+\label{sec:setup}
 The following components were present in the lab:
 
 \begin{itemize}
     \item Model Car: The model car has three servos for the brakes, one servo for steering and an engine for acceleration. All of these components are controlled via a servo controller board.
    
-    \item Servo Controller Board: The servo controller board is a \textit{pololu maestro servo controller board} which is attached to a Raspberry Pi via a usb-to-uart bridge.
+    \item Servo Controller Board: The servo controller board is a \textit{pololu maestro mini servo controller board} which is attached to a Raspberry Pi via a usb-to-uart bridge.
    
     \item Raspberry Pi: The Raspberry Pi is responsible for sending control commands to the servo controller board. It receives its input data from a PandaBoard via a mqtt topic to which it is subscribed. The Raspberry Pi runs Genode with Fiasco.OC.
    
@@ -24,6 +25,7 @@ An image of the model car is shown in figure \ref{fig:model}. The servos can be 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Source Code Structure}
+\label{sec:scs}
 The complete structure of the project directory can be seen in figure \ref{fig:structure}. All of the subdirectories are described in more detail in the following. \\
 
 \begin{figure}[h]
