@@ -109,6 +109,7 @@ In the subdirectory pololu resides a shell script and a c program, which are ori
 We use mqtt for both, the communication between the simulation and the PandaBoard and the communication between the PandaBoard and the Raspberry Pi.
 
 \subsubsection{car-control}
+\label{sec:mqtt-car-control}
 This is the topic name of the mqtt topic to which the PandaBoard is subscribed to. Commands to this topic are sent from the simulation. All commands need to have the following format: \\
 
 \textbf{Format:} (command,value) \\
