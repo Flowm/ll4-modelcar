@@ -35,7 +35,7 @@ From the initial task description we can derive the following tasks related to t
 
 \paragraph{\textbf{T4}} The next task was to connect the Raspberry Pi with the \textit{pololu maestro} servo controller board. Obviously, this is necessary in order to be able to control the connected servos. The \textit{pololu} boards are quite comfortable in the way that they support a serial connection. Therefore, we only had to plug the usb-to-uart bridge into the Raspberry Pi.
 
-\paragraph{\textbf{T5}} The Genode servo controller application is the main task regarding the Raspberry Pi. Is is completely described in section \ref{sec:pi-genode}.
+\paragraph{\textbf{T5}} The Genode servo controller application is the main task regarding the Raspberry Pi. It is completely described in section \ref{sec:pi-genode}.
 
 \paragraph{\textbf{T6}} Another obvious task was to convert the abstract control commands coming from the simulation into concrete servo values that can be used in order to control the servos. However, in our opinion it is more meaningful to separate this task from the rest of the tasks of the Raspberry Pi. That is because the Raspberry Pi is actually only responsible for controlling the servos, but not for the core logic. Therefore, we shifted this task to the PandaBoard and expect mqtt messages that are already in the right servo format. 
 
