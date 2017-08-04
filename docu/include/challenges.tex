@@ -8,7 +8,10 @@
 % - Missing libs for linux build
 % - No administration rights on lab pc
 % 	- Can't be solved on our own
-Most of our work was done on the lab computer. During this work we encountered several challenges which proved at least time consume. The lab computer is attached to the lrz network and on booting it loads an image from a central server. Because of this network set up the user has very restricted rights on the computer to prevent abuse. However this also prevented us from installing missing libraries on the computer e.g. mosquitto for gaining experience and testing of mqtt communication. 
+Most of our work was done on the lab computer. During this work we encountered several challenges which proved at least time consume. The lab computer is attached to the lrz network and on booting it loads an image from a central server. Because of this network set up the user has very restricted rights on the computer to prevent abuse. However this also prevented us from installing missing libraries on the computer e.g. mosquitto for gaining experience and testing of mqtt communication. Furthermore our working directory(/var/tmp) was not mounted at some point for an unknown reason.
+Additionally it was planned to use tftp boot to ease booting a newly compiled image. However this first failed due to firewall rules and later due to missing administrator rights on the computer.\\
+
+All these problems couldn't be fixed by ourselves, but needed either a workaround or a technician. Nevertheless trying to fix them ourselves cost us a lot of time. For example getting tftp boot to work took us a whole afternoon of three hours and would have saved us time later, especially as the sd card reader wasn't reliable.
 
 \subsection{Build infrastructure issues (FM)}
 % - Project setup with updated provision scripts
