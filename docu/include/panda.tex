@@ -61,10 +61,10 @@ The \textit{Control} component is responsible for transforming the messages rece
 \autoref{lst:panda-tsteer} contains the algorithm for calculating the steering servos commands.
 First the input value is checked to verify it is within the acceptable input range.
 The value is then inverted to ensure correct mapping from the steering direction to the servo direction.
-Afterwards the value is transformed by first adjusting the range to $0-1$ and then mapped to the servo input range by multiplying it with the input range of the servo (\textit{SERVO\_UPPER\_BOUND - SERVO\_LOWER\_BOUND}) and then adding the minimum servo value \textit{SERVO\_LOWER\_BOUND}.
+Afterwards the value is transformed by first adjusting the range to $0-1$ and then mapped to the servo input range by multiplying it with the input range of the servo (\textit{SERVO\_UPPER\_BOUND - SERVO\_LOWER\_BOUND}) and then adding the minimum servo value \textit{SERVO\_LOWER\_BOUND}. \\
 
-As described in \autoref{sec:servo-hard} the minimum servo value is 4000 and the maximum servo value is 8000.
-After testing the \textit{SERVO\_LOWER\_BOUND} was set to 4500 while the \textit{SERVO\_UPPER\_BOUND} was set to 7500 to prevent an actuation of the servos beyond the actuation limits of the attached hardware. \\
+%As described in \autoref{sec:servo-hard} the minimum servo value is 4000 and the maximum servo value is 8000.
+%After testing the \textit{SERVO\_LOWER\_BOUND} was set to 4500 while the \textit{SERVO\_UPPER\_BOUND} was set to 7500 to prevent an actuation of the servos beyond the actuation limits of the attached hardware. \\
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[style=mylistings, language=c, label=lst:panda-tsteer, caption=Algorithm for  calculating the steering servo commands]
