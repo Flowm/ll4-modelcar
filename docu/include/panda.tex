@@ -49,15 +49,56 @@ The task then subscribes to the \textit{car-control} MQTT topic which causes all
 A callback that is executed on reception of every message then copies the data to a buffer where it is in turn processed by the main loop of the task.
 After parsing the type of the message, the command is then sent to the responsible function of the \textit{controller task} over IPC.
 
-%TODO FM Description of controller here
-% Transforms control commands into concrete servo values
-
 As all IPC under Genode is synchronous, the \textit{Main} task resumes execution after the function call from the \textit{controller} task returns with the servo adjustment value obtained from the processed command.
 The servo value is then published to the \texttt{car-servo} MQTT topic to which the \textit{Raspberry PI} is subscribed and handles all further processing.
 
+% Advantages of genode task
 
 \subsubsection{Command processing}
 \label{sec:panda-convert}
+The \textit{Control} component is responsible for transforming the messages received in an hardware independent format as described in \autoref{sec:mqtt-car-control} to concrete servo values suited for the servos built into the model car.
+
+\autoref{lst:panda-tsteer} contains the algorithm for calculating the steering servos commands.
+First the input value is checked to verify it is within the acceptable input range.
+The value is then inverted to ensure correct mapping from the steering direction to the servo direction.
+Afterwards the value is transformed by first adjusting the range to $0-1$ and then mapped to the servo input range by multiplying it with the input range of the servo (\textit{SERVO\_UPPER\_BOUND - SERVO\_LOWER\_BOUND}) and then adding the minimum servo value \textit{SERVO\_LOWER\_BOUND}.
+As described in \autoref{sec:servo-hard} the minimum servo value is 4000 and the maximum servo value is 8000.
+After testing the \textit{SERVO\_LOWER\_BOUND} was set to 4500 while the \textit{SERVO\_UPPER\_BOUND} was set to 7500 to prevent an actuation of the servos beyond the actuation limits of the attached hardware. \\
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[style=mylistings, language=c, label=lst:panda-tsteer, caption=Algorithm for  calculating the steering servo commands]
+int transform_steer(double value) {
+	if (value < -1 || value > 1) {
+		PERR("Invalid steering angle - range is -1 to 1");
+		return -1;
+	}
+
+	// Invert value as SpeedDreams thinks -1 is right
+	value = -value;
+
+	value = (value + 1)/2;
+	return (SERVO_UPPER_BOUND - SERVO_LOWER_BOUND) * value + SERVO_LOWER_BOUND;
+}
+\end{lstlisting}
+\end{minipage} \\
+
+%\begin{minipage}{\linewidth}
+%\begin{lstlisting}[style=mylistings, language=c, label=lst:panda-tbreak, caption=Algorithm for calculating the break servo commands]
+%int transform_brake(double value) {
+%	if (value < 0 || value > 1) {
+%		PERR("Invalid target brake position - range is 0 to 1");
+%		return -1;
+%	}
+%
+%	return (SERVO_UPPER_BOUND - SERVO_LOWER_BOUND) * value + SERVO_LOWER_BOUND;
+%}
+%\end{lstlisting}
+%\end{minipage} \\
+
+
+While the current controller only transforms the servo commands and forwards them, the design would also allow more high-level commands from the simulation to be processed where a single control \texttt{car-control} command generates a series of \texttt{car-servo} commands.
+One example for this would be ABS style actuation of the servos and relying on sensor data to control the breaking strength.
+As no suitable sensor measurements were available during this project, this part has not been implemented.
 
 \subsubsection{Testing}
 \label{sec:panda-testing}
@@ -68,7 +109,7 @@ The publish–subscribe pattern used by the MQTT server allows multiple clients 
 In this style of communication there are no direct communication links and the components are loosely coupled, simplifying the testing of the interfaces between components.
 
 By using the MQTT commandline tools available under Linux in the \texttt{mosquitto-clients} package message can easily be injected into the \texttt{car-control} topic without changing the configuration of any components.
-\autoref{lst:panda-msgpub} shows a small test script that continiously sends steering control messages that cause the steering servos to alternate between actuation to the left and to the right. \\ % when processed by Panda, Rpi and servo components.
+\autoref{lst:panda-msgpub} shows a small test script that continuously sends steering control messages that cause the steering servos to alternate between actuation to the left and to the right. \\ % when processed by Panda, Rpi and servo components.
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[style=mylistings, language=c, label=lst:panda-msgpub, caption=Injecting steering commands over MQTT]
