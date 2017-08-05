@@ -1,27 +1,50 @@
 \subsection{PandaBoard (FM)}
 \label{sec:panda}
-%TODO FM: Write chapter
 
 \subsubsection{Overview}
 \label{sec:panda-overview}
-
+The modelcar hardware contains 4 PandaBoards intended for running the Engine Control Units (ECU) communicating with the SpeedDreams simulation, processing the simulation data and generating the servo commands.
+While two PandaBoards are used by the simulation team to process the simulation data from SpeedDreams, another PandaBoard is used by our team to process the hardware control commands described in \autoref{sec:mqtt-car-control}.
 
 
 \subsubsection{Requirements}
 \label{sec:panda-req}
 The following tasks were derived from the initial project description for the component running on the PandaBoard:
 \begin{itemize}
-    \item \textbf{T1}: Install Genode with Fiasco.OC
-    \item \textbf{T2}: Develop MQTT client
-    \item \textbf{T3}: Convert control commands into concrete servo values
-    \item \textbf{T4}: Generate control commands
+    \item \textbf{TP1}: Install Genode with Fiasco.OC
+    \item \textbf{TP2}: Develop MQTT client
+    \item \textbf{TP3}: Convert control commands into concrete servo values
+    \item \textbf{TP4}: Generate control commands
 \end{itemize}
 
-\subsubsection{Hardware}
-\label{sec:panda-hw}
+\paragraph{\textbf{TP1}} As operating system for the PandaBoard Genode running on top of the Fiasco.OS microkernel was used.
+While there were less issues with running Genode on the PandaBoard compared to the Raspberry PI, a linux userland implementation of the PandaBoard component is also available in the \texttt{old/linux} folder and was used during initial development and testing.
+
+\paragraph{\textbf{TP2}} As described in \autoref{sec:rpi-req} the same MQTT client based on the mosquitto library was used for the Raspberry Pi and the PandaBoard.
+The PandaBoard subscribes to the \texttt{car-control} topic, processes received messages and then publishes to the \texttt{car-servo} topic.
+
+\paragraph{\textbf{TP3}} The main purpose of the PandaBoard component is the transformation of generic control commands (eg. steer left, break) to concrete servo values. The format of the input and output messages is described in \autoref{sec:api} while the transformation is described in \autoref{sec:panda-genode}
+
+\paragraph{\textbf{TP4}} To test the application independently of the SpeedDreams simulation, control commands can also be supplied directly as described in \autoref{sec:panda-testing}
+
 
 \subsubsection{Genode application}
 \label{sec:panda-genode}
+The data from the SpeedDreams simulation is first received by the MQTT server on the \texttt{car-control} topic, as described in \autoref{sec:mqtt-car-control}.
+The component running on the PandaBoard is subscribed to this MQTT topic and processes the information, see \autoref{sec:panda}.
+The resulting commands are then published on the \texttt{car-servo} MQTT topic, described in \autoref{sec:mqtt-car-servo}.
+
+% Two runfiles
+% \autoref{fig:panda-genode}
+
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/comp_panda}
+    \caption{Genode components of the PandaBoard}
+    \label{fig:panda-genode}
+\end{figure}
 
 \subsubsection{Command processing}
 \label{sec:panda-convert}
