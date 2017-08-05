@@ -1,11 +1,6 @@
 \subsection{Raspberry Pi (TM)}
 \label{sec:rpi}
 
-% Tasks and did we reach them?
-% 2 Components -> main and servo
-% terminal problems: different than linux (device files)
-% problems and solution?
-
 \subsubsection{General information}
 The Raspberry Pi is one of the ECUs used in the setup. There are three Raspberry Pis placed on the model car in total, whereas two of them are Raspberry Pis of the first generation and one is a Raspberry Pi of the second generation. For our purpose we only need one of them. \\
 
@@ -21,16 +16,16 @@ From the initial task description we can derive the following tasks related to t
 \begin{itemize}
     \item \textbf{T1}: Install Genode with Fiasco.OC
     \item \textbf{T2}: Implement ProtoBuf by Google
-    \item \textbf{T3}: Develop MQTT client
+    \item \textbf{T3}: Develop mqtt client
     \item \textbf{T4}: Connect with servo controller board
-    \item \textbf{T5}: Implement Genode Servo controller application
+    \item \textbf{T5}: Implement Genode servo controller application
     \item \textbf{T6}: Convert control commands into concrete servo values
     \item \textbf{T7}: Read sensor values (optional)
 \end{itemize}
 
-\paragraph{\textbf{T1}} Since the complete project is based on Genode with Fiasco.OC, the first task was obviously to install the operating system on the Raspberry Pi. There have been many issues with this task which is described in detail in section \ref{sec:pi-problems}. Shortly summarized we were not able to build the operating system for the Raspberry Pi until the last two weeks of the lab course. For this reason we came up with a complete Linux-based solution at interim. The Linux-based solution is explained in section \ref{sec:pi-linux}.
+\paragraph{\textbf{T1}} Since the complete project is based on Genode with Fiasco.OC, the first task was obviously to install the operating system on the Raspberry Pi. There have been many issues with this task which is described in detail in section \ref{sec:pi-problems}. Shortly summarized, we were not able to build the operating system for the Raspberry Pi until the last two weeks of the lab course. For this reason we came up with a complete Linux-based solution at interim. The Linux-based solution is explained in section \ref{sec:pi-linux}.
 
-\paragraph{\textbf{T2}} The next two tasks are related to the message exchange between the PandaBoard and the Raspberry Pi. Originally, it was planned to use protocol buffers (ProtoBuf) by Google for the communication. ProtoBuf is a language -and platform-neutral way of serializing data comparable to XML or JSON format. However, the main advantage is its binary format which allows really fast parsing and shrinks messages to a minimum size. We have already started by specifying a \textit{.proto} file for the message type. However, afterwards we came to the conclusion that ProtoBuf is not really necessary and can be replaced by mqtt with messages in plain-format. This has mainly two reasons. Firstly, because the messages sent from the PandaBoard do only consist of a few characters and also have a really simple format. Therefore, it is absolutely fine to use plain-format. Secondly, because mqtt is already used for the communication between the simulation and the PandaBoard. Therefore, we have already a mqtt broker in our project and apart from that, we have to implement only one of the two techniques.
+\paragraph{\textbf{T2}} The next two tasks are related to the message exchange between the PandaBoard and the Raspberry Pi. Originally, it was planned to use protocol buffers (ProtoBuf) by Google for the communication. ProtoBuf is a language- and platform-neutral way of serializing data comparable to XML or JSON format. However, the main advantage is its binary format which allows really fast parsing and shrinks messages to a minimum size. We have already started by specifying a \textit{.proto} file for the message type. However, afterwards we came to the conclusion that ProtoBuf is not really necessary and can be replaced by mqtt with messages in plain-format. This has mainly two reasons. Firstly, because the messages sent from the PandaBoard do only consist of a few characters and also have a really simple format. Therefore, it is absolutely fine to use plain-format. Secondly, because mqtt is already used for the communication between the simulation and the PandaBoard. Therefore, we have already a mqtt broker in our project and apart from that, we have to implement only one of the two techniques.
 
 \paragraph{\textbf{T3}} The mqtt client is only implemented once in the project and is used by the Raspberry Pi, as well as the PandaBoard. The mqtt client is based on the mosquitto library which is already ported for Genode. The Raspberry Pi is subscribed to the topic \texttt{car-servo} at which the PandaBoard publishes its messages. A description of the message format can be found in section \ref{sec:mqtt-car-servo}. After receiving the messages, the Raspberry Pi only checks for valid input values and controls the servos accordingly.
 

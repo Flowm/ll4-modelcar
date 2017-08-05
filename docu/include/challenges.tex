@@ -16,18 +16,18 @@ Additionally it was planned to use tftp boot to ease booting a newly compiled im
 
 All these problems could not be fixed by ourselves, but needed either a workaround or a technician. Nevertheless trying to fix them ourselves cost us a lot of time. For example getting tftp boot to work took us a whole afternoon of three hours although we were getting help from the system administrator of the chair. Moreover it would have saved us time later, especially as the sd card reader was not reliably working.
 
-\subsection{Build infrastructure issues (FM)}
-% - Project setup with updated provision scripts
-
-
 \subsection{Raspberry Pi build (TM)}
 \label{sec:pi-problems}
 Until the last two weeks of the lab course we were not able to build the Genode operating system for the Raspberry Pi. According to the documentation of the \textit{argos-research} project\footnote{\url{https://argos-research.github.io/platforms.html}}, the only requirement in order to build the image for the Raspberry Pi is to change the \texttt{GENODE\_TARGET} inside the Makefile to \texttt{foc\_rpi}. However, due to problems in the kernel of Genode itself, the compilation always failed. \\
 
 Since our knowledge about the internals of Genode is not that high, we were not able to fix this problem by ourselves. However, trying to compile and searching for the problem still took quite a long time of our lab course. \\
 
-Apparently, after some time the problem was fixed by a member of the \textit{argos-research} team by updating the Genode version and changing from the \texttt{foc} kernel to the \texttt{focnados}. However, this way we were able to compile the image, but the image was not bootable on the hardware. Later, it turned out that a wrong base address inside the bootlader was causing this problem. Again we were not able to solve this issue by ourselves. \\
+Apparently, after some time the problem was fixed by a member of the \textit{argos-research} team by updating the Genode version and changing from the \texttt{foc} kernel to the \texttt{focnados}. However, this way we were able to compile the image, but the image was not bootable on the hardware. Later, it turned out that a wrong base address inside the bootloader was causing this problem. Again we were not able to solve this issue by ourselves. \\
 
 In the meantime we decided to switch to \textit{Raspbian} instead of Genode since we could not predict whether we would be able to compile the operating system until the end of the lab course, at all. \\
 
 In the last two weeks of the course the problem was again fixed by the member of the \textit{argos-research} team and we could finally switch back to Genode.
+
+
+\subsection{Build infrastructure issues (FM)}
+% - Project setup with updated provision scripts
