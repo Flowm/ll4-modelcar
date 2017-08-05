@@ -16,6 +16,7 @@ Additionally it was planned to use tftp boot to ease booting a newly compiled im
 
 All these problems could not be fixed by ourselves, but needed either a workaround or a technician. Nevertheless trying to fix them ourselves cost us a lot of time. For example getting tftp boot to work took us a whole afternoon of three hours although we were getting help from the system administrator of the chair. Moreover it would have saved us time later, especially as the sd card reader was not reliably working.
 
+
 \subsection{Raspberry Pi build (TM)}
 \label{sec:pi-problems}
 Until the last two weeks of the lab course we were not able to build the Genode operating system for the Raspberry Pi. According to the documentation of the \textit{argos-research} project\footnote{\url{https://argos-research.github.io/platforms.html}}, the only requirement in order to build the image for the Raspberry Pi is to change the \texttt{GENODE\_TARGET} inside the Makefile to \texttt{foc\_rpi}. However, due to problems in the kernel of Genode itself, the compilation always failed. \\
@@ -29,5 +30,12 @@ In the meantime we decided to switch to \textit{Raspbian} instead of Genode sinc
 In the last two weeks of the course the problem was again fixed by the member of the \textit{argos-research} team and we could finally switch back to Genode.
 
 
-\subsection{Build infrastructure issues (FM)}
+\subsection{Build infrastructure (FM)}
 % - Project setup with updated provision scripts
+The \textit{argos-research/operating-system} repository provides a Varantfile in combination with a provision script allowing the setup of the build environment in an automated and reproducible manner.
+Unfortunately the vagrant setup caused some issues with multiple project members due to the use of Virtualbox shared folders for the complete source code repository.
+Additionally the provision script could not be used in the lab environment due to missing access right for some steps that required elevated permissions and some hardcoded paths only available in vagrant. \\
+
+After an update of the provision script based on feedback during the first weeks of the practical it can now also be used to setup up the project outside of the lab environment and without direct dependence on vagrant as virtualization backend.
+
+To ensure a simple setup of the model-car project with all it's dependencies without direct integration in the \textit{argos-research/operating-system} repository a \texttt{setup.sh} script is provided in the top level of the project repository and the required steps for the build are described in the projects \texttt{README.md}.
