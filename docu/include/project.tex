@@ -116,10 +116,10 @@ We use mqtt for both, the communication between the simulation and the PandaBoar
 \texttt{car-control} is the topic name of the mqtt topic to which the PandaBoard is subscribed to. Commands to this topic are sent from the simulation. All commands need to have the following format: \\
 
 \textbf{Format:} (command,value) \\
-Command describes the type of request, i.e. braking, steering or acceleration. Value describes the strength of the command. All possible commands and values are listed in table \ref{tab:car-control}. \\
+Command describes the type of request, i.e. braking, steering or acceleration. Value describes the strength of the command. All commands and values are listed in table \ref{tab:car-control}.
 
 \textbf{Example:} (1,0.5) \\
-This is a brake request with half braking force. \\
+This is a brake request with half braking force.
 
 \begin{table}[h]
     \centering
@@ -139,7 +139,7 @@ This is a brake request with half braking force. \\
 \texttt{car-servo} is the topic name of the mqtt topic to which the Raspberry Pi is subscribed to. Commands to this topic are sent from the PandaBoard. All commands need to have the following format: \\ 
 
 \textbf{Format:} (channel,value) \\
-Channel is a number ranging from 0 to 11 and describes the channel number on the servo controller board. The braking servos are connected to channels 0, 1 and 2, whereas the steering servo is connected to channel 6. Values are pwm signals ranging from 4500 to 7500. The neutral value for the servo is 6000. The main engine can not be controlled with the pololu maestro servo controller board. \\
+Channel is a number ranging from 0 to 11 and describes the channel number on the servo controller board. The braking servos are connected to channels 0, 1 and 2, whereas the steering servo is connected to channel 6. Values are pwm signals ranging from 4500 to 7500. The neutral value for the servo is 6000. The main engine can not be controlled with the pololu maestro servo controller board.
 
 \textbf{Example:} (0,7500) \\
 This command sends a pwm signal with value 7000 to channel 0. This means that the brake connected to channel 0 gets activated with full force. 
