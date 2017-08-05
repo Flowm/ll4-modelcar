@@ -4,7 +4,7 @@
 \subsubsection{Overview}
 \label{sec:panda-overview}
 The modelcar hardware contains 4 PandaBoards intended for running the Engine Control Units (ECU) communicating with the SpeedDreams simulation, processing the simulation data and generating the servo commands.
-While two PandaBoards are used by the simulation team to process the simulation data from SpeedDreams, another PandaBoard is used by our team to process the hardware control commands described in \autoref{sec:mqtt-car-control}.
+While two PandaBoards are used by the simulation team to process the simulation data from SpeedDreams, another Panda\-Board is used by our team to process the hardware control commands described in \autoref{sec:mqtt-car-control}.
 
 
 \subsubsection{Requirements}
@@ -62,6 +62,7 @@ The \textit{Control} component is responsible for transforming the messages rece
 First the input value is checked to verify it is within the acceptable input range.
 The value is then inverted to ensure correct mapping from the steering direction to the servo direction.
 Afterwards the value is transformed by first adjusting the range to $0-1$ and then mapped to the servo input range by multiplying it with the input range of the servo (\textit{SERVO\_UPPER\_BOUND - SERVO\_LOWER\_BOUND}) and then adding the minimum servo value \textit{SERVO\_LOWER\_BOUND}.
+
 As described in \autoref{sec:servo-hard} the minimum servo value is 4000 and the maximum servo value is 8000.
 After testing the \textit{SERVO\_LOWER\_BOUND} was set to 4500 while the \textit{SERVO\_UPPER\_BOUND} was set to 7500 to prevent an actuation of the servos beyond the actuation limits of the attached hardware. \\
 

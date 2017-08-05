@@ -6,26 +6,26 @@
 From the original functional requirements the following tasks related to the servos were derived:
 
 \begin{itemize}
-    \item \textbf{T1}: Control steering and braking servos
-    \item \textbf{T2}: Control main engine(optional)
-    \item \textbf{T3}: Connect servos to the controller board
-    \item \textbf{T4}: Commissioning of the servo controller board
-    \item \textbf{T5}: Check servo controller boards functionality
+    \item \textbf{TS1}: Control steering and braking servos
+    \item \textbf{TS2}: Control main engine(optional)
+    \item \textbf{TS3}: Connect servos to the controller board
+    \item \textbf{TS4}: Commissioning of the servo controller board
+    \item \textbf{TS5}: Check servo controller boards functionality
 \end{itemize}
 
-\paragraph{\textbf{T1}}
+\paragraph{\textbf{TS1}}
 The first, most important and most obvious task is to control the one steering and three braking servos mounted on the car. This task can be seen as the overall goal, as finishing all other non optional tasks leads to accomplishing this goal.
 
-\paragraph{\textbf{T2}}
+\paragraph{\textbf{TS2}}
 To control the main engine was another task, though marked as optional. Accomplishing it would have been impressive to spectators, however it was not completed due to various reasons. First off all, time was running out at the end of the project due to several minor and major difficulties described in chapter~\ref{sec:challenges}. Furthermore the main engine can not be controlled by the Pololu Maestro Mini servo controller board, because of its complexity and power consumption. Instead another more complex controller needs to be used, which requires an additional serial connection. However Genode as an operating system only supports one serial connection currently. That is why an additional device, most likely a Raspberry Pi, would have been needed to be integrated into the setup to control it.
 
-\paragraph{\textbf{T3}}
+\paragraph{\textbf{TS3}}
 Another Requirement was to connect the servos to the servo controller board. However the braking servos were already connected when the project started and never disconnected and therefore introduced no work. In contrast the steering servo had to be connected several times to the servo controller board.
 
-\paragraph{\textbf{T4}}
+\paragraph{\textbf{TS4}}
 The next task was to commission the servo controller board. This was first done with a graphical program provided by the manufacturer of the servo controller board. Afterwards a shell script and c code were used to control it. This will be described in more detail in section~\ref{sec:servo-soft}.
 
-\paragraph{\textbf{T5}}
+\paragraph{\textbf{TS5}}
 At last the servo controller board had to be checked if it is working and for its capabilities. This was done while commissioning it.
 
 \subsubsection{Hardware Description}
