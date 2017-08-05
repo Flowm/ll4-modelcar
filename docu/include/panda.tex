@@ -1,3 +1,61 @@
 \subsection{PandaBoard (FM)}
 \label{sec:panda}
 %TODO FM: Write chapter
+
+\subsubsection{Overview}
+\label{sec:panda-overview}
+
+
+
+\subsubsection{Requirements}
+\label{sec:panda-req}
+The following tasks were derived from the initial project description for the component running on the PandaBoard:
+\begin{itemize}
+    \item \textbf{T1}: Install Genode with Fiasco.OC
+    \item \textbf{T2}: Develop MQTT client
+    \item \textbf{T3}: Convert control commands into concrete servo values
+    \item \textbf{T4}: Generate control commands
+\end{itemize}
+
+\subsubsection{Hardware}
+\label{sec:panda-hw}
+
+\subsubsection{Genode application}
+\label{sec:panda-genode}
+
+\subsubsection{Command processing}
+\label{sec:panda-convert}
+
+\subsubsection{Testing}
+\label{sec:panda-testing}
+To verify the data processing and the actuation of the hardware servos based on control commands sent to the \texttt{car-control} MQTT topic a test script was developed.
+This way the hardware side of the hardware in the loop setup described in \autoref{sec:intro} can be tested independently of the software side developed by another project team.
+
+The publish–subscribe pattern used by the MQTT server allows multiple clients to simultaneously connect to the server and subscribe to updates on a certain topic or publish messages to a certain topic.
+In this style of communication there are no direct communication links and the components are loosely coupled, simplifying the testing of the interfaces between components.
+
+By using the MQTT commandline tools available under Linux in the \texttt{mosquitto-clients} package message can easily be injected into the \texttt{car-control} topic without changing the configuration of any components.
+\autoref{lst:panda-msgpub} shows a small test script that continiously sends steering control messages that cause the steering servos to alternate between actuation to the left and to the right. \\ % when processed by Panda, Rpi and servo components.
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[style=mylistings, language=c, label=lst:panda-msgpub, caption=Injecting steering commands over MQTT]
+#!/usr/bin/env bash
+MQTT_IP=$1
+
+while true; do
+	mosquitto_pub -h $MQTT_IP -t 'car-control' -m '0,1.0'
+	sleep 1
+	mosquitto_pub -h $MQTT_IP -t 'car-control' -m '0,-1.0'
+	sleep 1
+done
+\end{lstlisting}
+\end{minipage} \\
+
+In a similar manner the \texttt{mosquitto\_sub} commandline tool can be used to subscribe to MQTT topics. This provides easy access to the communication between components for debugging and testing purposes.
+\autoref{lst:panda-msgsub} shows the command used to monitor the message published by the panda component. In both listings \texttt{\$MQTT\_IP} is a variable containing the IP address of the MQTT server. \\
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[style=mylistings, language=c, label=lst:panda-msgsub, caption=Subscribing to MQTT topics]
+mosquitto_sub -h $MQTT_IP -t 'car-servo'
+\end{lstlisting}
+\end{minipage} \\
