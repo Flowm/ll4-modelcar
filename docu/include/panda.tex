@@ -17,7 +17,7 @@ The following tasks were derived from the initial project description for the co
     \item \textbf{TP4}: Generate control commands
 \end{itemize}
 
-\paragraph{\textbf{TP1}} As operating system for the PandaBoard Genode running on top of the Fiasco.OS microkernel was used.
+\paragraph{\textbf{TP1}} Genode running on top of the Fiasco.OS microkernel is used as operating system for the PandaBoard.
 While there were less issues with running Genode on the PandaBoard compared to the Raspberry PI, a linux userland implementation of the PandaBoard component is also available in the \texttt{old/linux} folder and was used during initial development and testing.
 
 \paragraph{\textbf{TP2}} As described in \autoref{sec:rpi-req} the same MQTT client based on the mosquitto library was used for the Raspberry Pi and the PandaBoard.
@@ -30,14 +30,7 @@ The PandaBoard subscribes to the \texttt{car-control} topic, processes received 
 
 \subsubsection{Genode application}
 \label{sec:panda-genode}
-The data from the SpeedDreams simulation is first received by the MQTT server on the \texttt{car-control} topic, as described in \autoref{sec:mqtt-car-control}.
-The component running on the PandaBoard is subscribed to this MQTT topic and processes the information, see \autoref{sec:panda}.
-The resulting commands are then published on the \texttt{car-servo} MQTT topic, described in \autoref{sec:mqtt-car-servo}.
-
-% Two runfiles
-% \autoref{fig:panda-genode}
-
-
+The Genode application on the PandaBoard consists of two separate tasks communicating over IPC. The \textit{Main} task handles initial setup and network communication while the \textit{Control} task is responsible for the transformation of control commands to concrete servo commands. The interaction between these components is visible in \autoref{fig:panda-genode}.
 
 \begin{figure}[h]
     \centering
@@ -46,15 +39,32 @@ The resulting commands are then published on the \texttt{car-servo} MQTT topic, 
     \label{fig:panda-genode}
 \end{figure}
 
+The runfile (\texttt{run/car\_panda.run}) contains the build and runtime dependencies as well as configuration settings for individual components.
+
+After startup the \textit{Main} task reads the network configuration from the runfile and configures the network accordingly with either a static IP address or a IP address dynamically obtained over DHCP.
+
+Afterwards it retrieves the IP of the MQTT server from the runfile and attempts to establish a connection.
+The task then subscribes to the \textit{car-control} MQTT topic which causes all messages that are published on this topic to be forwarded to the application.
+
+A callback that is executed on reception of every message then copies the data to a buffer where it is in turn processed by the main loop of the task.
+After parsing the type of the message, the command is then sent to the responsible function of the \textit{controller task} over IPC.
+
+%TODO FM Description of controller here
+% Transforms control commands into concrete servo values
+
+As all IPC under Genode is synchronous, the \textit{Main} task resumes execution after the function call from the \textit{controller} task returns with the servo adjustment value obtained from the processed command.
+The servo value is then published to the \texttt{car-servo} MQTT topic to which the \textit{Raspberry PI} is subscribed and handles all further processing.
+
+
 \subsubsection{Command processing}
 \label{sec:panda-convert}
 
 \subsubsection{Testing}
 \label{sec:panda-testing}
 To verify the data processing and the actuation of the hardware servos based on control commands sent to the \texttt{car-control} MQTT topic a test script was developed.
-This way the hardware side of the hardware in the loop setup described in \autoref{sec:intro} can be tested independently of the software side developed by another project team.
+This way the hardware side of the HIL setup described in \autoref{sec:intro} can be tested independently of the software side developed by another project team.
 
-The publish–subscribe pattern used by the MQTT server allows multiple clients to simultaneously connect to the server and subscribe to updates on a certain topic or publish messages to a certain topic.
+The publish–subscribe pattern used by the MQTT server allows multiple clients to simultaneously connect to the server and subscribe to updates on a certain topic or publish messages to a topic.
 In this style of communication there are no direct communication links and the components are loosely coupled, simplifying the testing of the interfaces between components.
 
 By using the MQTT commandline tools available under Linux in the \texttt{mosquitto-clients} package message can easily be injected into the \texttt{car-control} topic without changing the configuration of any components.
