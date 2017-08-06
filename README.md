@@ -8,7 +8,7 @@ Control data is received on a MQTT topic, processed on the ECU (pandaboard) and 
 It comunicates with the low level servo controller (pololu maestro) over a serial port which then controls the servos with a PWM signal.
 
 # Install
-Execute `setup.sh`
+Execute `setup.sh` and follow the printed instructions.
 
 # Build
 ## PandaBoard

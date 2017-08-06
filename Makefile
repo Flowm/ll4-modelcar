@@ -1,6 +1,7 @@
 setup:
 	PROJECT=car_panda GENODE_TARGET=focnados_panda $(MAKE) -C ../../../ build_dir
 	PROJECT=car_rpi GENODE_TARGET=focnados_rpi $(MAKE) -C ../../../ build_dir
+	PROJECT=car_rpi GENODE_TARGET=focnados_rpi $(MAKE) -C ../../../ libports
 
 panda:
 	PROJECT=car_panda GENODE_TARGET=focnados_panda $(MAKE) -C ../../../ run
