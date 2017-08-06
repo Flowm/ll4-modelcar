@@ -142,7 +142,7 @@ This is a brake request with half braking force.
 Channel is a number ranging from 0 to 11 and describes the channel number on the servo controller board. The braking servos are connected to channels 0, 1 and 2, whereas the steering servo is connected to channel 6. Values are pwm signals ranging from 4500 to 7500. The neutral value for the servo is 6000. The main engine can not be controlled with the pololu maestro servo controller board.
 
 \textbf{Example:} (0,7500) \\
-This command sends a pwm signal with value 7000 to channel 0. This means that the brake connected to channel 0 gets activated with full force. 
+This command sends a pwm signal with value 7500 to channel 0. This means that the brake connected to channel 0 gets activated with full force. 
 
 
 
@@ -151,7 +151,7 @@ This command sends a pwm signal with value 7000 to channel 0. This means that th
 \subsection{Servo component}
 \label{sec:comp-servo}
 
-The servo component provides five methods. All methods return -1 in case of an error, else 0. Obviously, the getter functions return the requested value.
+The servo component provides five methods. All methods return -1 in case of an error, else 0. Obviously, the getter functions return the requested value instead.
 \autoref{lst:servo} shows the corresponding function declarations exported to Genode.
 \begin{itemize}
 \item The function \textbf{setTarget} receives the channel of the connected servo and the target position as parameters.
@@ -176,7 +176,7 @@ GENODE_RPC(Rpc_getMovingState, int, getMovingState);
 \label{sec:comp-controller}
 
 The controller component provides two methods each expecting a double as input and returning an integer value.
-\autoref{lst:servo} shows the corresponding function declarations exported to Genode.
+\autoref{lst:controller} shows the corresponding function declarations exported to Genode.
 \begin{itemize}
 \item The function \textbf{transform\_steer} transforms a steering angle between -1 and 1 where -1 is completely right, and returns the corresponding pwm value in quarter microseconds for the servo.
 \item The function \textbf{transform\_brake} transforms a braking value between 0 and 1 where 1 means fully applied, and returns the corresponding pwm value in quarter microseconds for the servo.
